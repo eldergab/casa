@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Desafios — Doutrina e Convênios 111</title>
+<style>
+  :root{
+    --bg:#0f172a; --card:#0b1220; --muted:#9aa4b2; --accent:#60a5fa;
+    --glass: rgba(255,255,255,0.04); --radius:14px;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background: linear-gradient(180deg,#071024 0%, #0b1b2e 100%);
+    color:#e6eef8; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    padding:16px;
+  }
+  .app{
+    max-width:1100px; margin:8px auto; display:grid; grid-template-columns: 1fr 380px; gap:18px;
+  }
+  header{grid-column:1/ -1; display:flex; gap:12px; align-items:center;}
+  .logo{
+    width:56px; height:56px; border-radius:10px; background:linear-gradient(135deg,var(--accent),#7dd3fc);
+    display:flex; align-items:center; justify-content:center; color:#032; font-weight:700; font-size:20px;
+    box-shadow: 0 6px 24px rgba(3,16,35,0.6);
+  }
+  header h1{font-size:18px;margin:0}
+  header p{margin:0;color:var(--muted); font-size:13px}
+  main{background:var(--card); border-radius:var(--radius); padding:18px; box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+  aside{background:var(--glass); border-radius:var(--radius); padding:18px; height:fit-content}
+  .activity{background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); padding:14px; border-radius:12px; margin-bottom:12px}
+  .activity h2{margin:0 0 6px 0; font-size:15px}
+  .activity p{margin:0 0 10px 0; color:var(--muted); font-size:14px}
+  .btn{
+    display:inline-flex; gap:8px; align-items:center; padding:8px 12px; background:var(--accent); color:#012; border-radius:8px;
+    cursor:pointer; border:none; font-weight:600; box-shadow:0 6px 18px rgba(96,165,250,0.12)
+  }
+  .muted{color:var(--muted); font-size:13px}
+  .scale{display:flex; gap:8px; margin-top:8px}
+  .scale button{flex:1;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04); background:transparent; color:var(--muted)}
+  .players{display:flex; gap:8px; flex-wrap:wrap}
+  .player{background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:10px; display:flex; gap:8px; align-items:center}
+  input,select,textarea{background:transparent;border:1px solid rgba(255,255,255,0.06); padding:8px;border-radius:8px;color:inherit;width:100%}
+  .dice-area{display:flex; gap:8px; align-items:center; margin-top:10px; flex-wrap:wrap}
+  .die{width:74px;height:74px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:700;background:linear-gradient(180deg,#0b2540,#041029);box-shadow:inset 0 -6px 18px rgba(0,0,0,0.5)}
+  .rolls{margin-top:10px; display:flex; gap:8px; flex-wrap:wrap}
+  .roll-card{background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:8px; min-width:110px}
+  .small{font-size:13px;color:var(--muted)}
+  footer{grid-column:1/-1; color:var(--muted); font-size:13px; text-align:center; margin-top:8px}
+  .link{color:var(--accent); text-decoration:underline; cursor:pointer}
+  /* responsive */
+  @media (max-width:980px){
+    .app{grid-template-columns:1fr; padding-bottom:60px}
+    aside{order:2}
+  }
+  /* modal */
+  .modal{position:fixed; inset:0; background:rgba(2,6,23,0.6); display:none; align-items:center; justify-content:center; z-index:40}
+  .modal .box{background:var(--card); padding:18px; border-radius:12px; max-width:720px; width:95%}
+  .row{display:flex; gap:8px; align-items:center}
+  .codebox{background:#021126; padding:10px; border-radius:8px; color:#9fd3ff; font-family:monospace; font-size:12px; white-space:pre-wrap; max-height:220px; overflow:auto}
+  .notice{background:linear-gradient(90deg, rgba(255,255,255,0.02), transparent); padding:10px; border-radius:8px; color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo">D&C</div>
+    <div>
+      <h1>Desafios — Doutrina e Convênios 111</h1>
+      <p>Jogo baseado na Lição 125 (D&C 111). Use o dado para escolher entrevistador/entrevistado, debater e abrir citações.</p>
+    </div>
+  </header>
+
+  <main>
+    <!-- Activity: escala -->
+    <section class="activity" id="escala">
+      <h2>1) Como as coisas vão acabar? (Escala)</h2>
+      <p>Peça para cada aluno marcar onde se encontra numa escala de 1 a 5 sobre confiança no futuro. Debata em duplas.</p>
+      <div class="scale" id="scaleBtns">
+        <button data-val="1">1 — Desanimado</button>
+        <button data-val="2">2</button>
+        <button data-val="3">3 — Indeciso</button>
+        <button data-val="4">4</button>
+        <button data-val="5">5 — Confiante</button>
+      </div>
+      <p class="small" id="scaleResult">Nenhuma escolha registrada.</p>
+    </section>
+
+    <!-- Activity: contexto -->
+    <section class="activity" id="contexto">
+      <h2>2) Um momento difícil para Joseph</h2>
+      <p>Leiam o contexto da lição (viagem a Salem, dívidas) e compartilhem: Quão confiante Joseph devia estar? Como isso se aplica a você?</p>
+      <div class="row" style="margin-top:10px; gap:8px">
+        <button class="btn" id="openLesson">Abrir lição (site)</button>
+        <a class="btn" id="openD&C" href="https://www.churchofjesuschrist.org/study/scriptures/dc-testament/dc/111?lang=por" target="_blank" rel="noopener">Abrir Doutrina e Convênios 111</a>
+      </div>
+      <p class="small">Fonte da lição: Manual do Professor — Doutrina e Convênios 111. 1</p>
+    </section>
+
+    <!-- Activity: grupos de versículos -->
+    <section class="activity" id="grupos">
+      <h2>3) "Apesar de vossa insensatez" — grupos de versículos</h2>
+      <p>Leia um dos grupos abaixo. Depois responda (no chat da sala ou em voz alta): quais perguntas você tem? Que verdades sobre Deus encontrou?</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr; gap:8px; margin-top:8px">
+        <div>
+          <strong>Grupo A</strong>
+          <p class="small">D&C 111:1–4</p>
+          <button class="btn small open-link" data-link="https://www.churchofjesuschrist.org/study/scriptures/dc-testament/dc/111?lang=por#1">Abrir versículos</button>
+        </div>
+        <div>
+          <strong>Grupo B</strong>
+          <p class="small">D&C 111:5–8</p>
+          <button class="btn small open-link" data-link="https://www.churchofjesuschrist.org/study/scriptures/dc-testament/dc/111?lang=por#5">Abrir versículos</button>
+        </div>
+        <div>
+          <strong>Grupo C</strong>
+          <p class="small">D&C 111:9–11</p>
+          <button class="btn small open-link" data-link="https://www.churchofjesuschrist.org/study/scriptures/dc-testament/dc/111?lang=por#9">Abrir versículos</button>
+        </div>
+        <div>
+          <strong>Atividade</strong>
+          <p class="small">Responda: Que perguntas você tem? Que verdades aprendeu?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Activity: Deus pode ordenar -->
+    <section class="activity" id="ordenar">
+      <h2>4) Deus pode ordenar todas as coisas para o nosso bem</h2>
+      <p>Organizem-se em trios. Cada um lê uma passagem relacionada e depois coloca no quadro (virtual) o que encontrou.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr; gap:8px; margin-top:8px">
+        <div>
+          <p class="small">Romanos 8:28</p>
+          <button class="btn small" onclick="window.open('https://www.churchofjesuschrist.org/study/scriptures/nt/rom/8?lang=por#28','_blank')">Abrir Romanos 8:28</button>
+        </div>
+        <div>
+          <p class="small">D&C 90:24</p>
+          <button class="btn small" onclick="window.open('https://www.churchofjesuschrist.org/study/scriptures/dc-testament/dc/90?lang=por#24','_blank')">Abrir D&C 90:24</button>
+        </div>
+        <div>
+          <p class="small">D&C 100:15</p>
+          <button class="btn small" onclick="window.open('https://www.churchofjesuschrist.org/study/scriptures/dc-testament/dc/100?lang=por#15','_blank')">Abrir D&C 100:15</button>
+        </div>
+        <div class="notice">
+          <small>Peça que cada trio escreva (num papel ou num chat) o que descobriu e como isso fortalece a confiança na preparação de Deus.</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dice / jogo -->
+    <section class="activity" id="jogo">
+      <h2>5) Jogo do Dado — Escolher entrevistador / entrevistado</h2>
+      <p>Adicione jogadores, role o(s) dado(s). Modo <strong>local</strong> ou <strong>online (WebRTC manual)</strong>.</p>
+
+      <div style="display:flex; gap:8px; align-items:center; margin-top:8px; flex-wrap:wrap">
+        <input id="playerName" placeholder="Nome do jogador (ex: João)" />
+        <button class="btn" id="addPlayer">Adicionar</button>
+      </div>
+
+      <div style="margin-top:10px" class="players" id="playerList"></div>
+
+      <div class="dice-area">
+        <div class="die" id="dieFace">—</div>
+        <div style="flex:1">
+          <div style="display:flex; gap:8px; margin-bottom:8px">
+            <button class="btn" id="rollBtn">Rodar dado (local)</button>
+            <button class="btn" id="rollAllBtn">Rodar para todos (local)</button>
+            <button class="btn" id="clearBtn" style="background:#ef4444;color:white">Limpar</button>
+          </div>
+          <div class="small">Resultado: <span id="lastResult">—</span></div>
+          <div class="rolls" id="rollCards"></div>
+        </div>
+      </div>
+
+      <hr style="margin:12px 0;border:none;border-top:1px dashed rgba(255,255,255,0.04)">
+
+      <h3 style="margin:0 0 8px 0">Modo Online (WebRTC - sinalização manual)</h3>
+      <p class="small">Troque a "Oferta" com o outro participante (copiar/colar). Depois cole a "Resposta" que recebeu.</p>
+
+      <div style="display:grid; gap:8px">
+        <div>
+          <button class="btn" id="createOffer">Criar Oferta (Gerar SDP)</button>
+          <button class="btn" id="createAnswer" style="display:none">Gerar Resposta (quando receber Oferta)</button>
+        </div>
+
+        <div>
+          <label class="small">SDP / Oferta (copiar e enviar para o outro):</label>
+          <div class="codebox" id="offerBox">—</div>
+        </div>
+
+        <div>
+          <label class="small">Cole aqui a SDP/Resposta que você recebeu:</label>
+          <textarea id="remoteSDP" rows="4" placeholder="Cole a SDP aqui"></textarea>
+          <div style="display:flex; gap:8px; margin-top:8px">
+            <button class="btn" id="applyRemote">Aplicar SDP Remota</button>
+            <button class="btn" id="sendSync" disabled>Enviar roll atual para parceiro</button>
+          </div>
+        </div>
+
+        <div class="small muted">Nota: após conexão estabelecida, cada roll local é enviado ao(s) peer(s) e aparece na lista com o nome do autor.</div>
+      </div>
+
+    </section>
+
+    <!-- Links & instruções -->
+    <section class="activity" id="extra">
+      <h2>Recursos e instruções</h2>
+      <p class="small">A lição original e todas as referências estão no Manual do Professor do Seminário.</p>
+      <p><a class="link" href="https://www.churchofjesuschrist.org/study/manual/doctrine-and-covenants-seminary-teacher-manual-2025/401-doctrine-and-covenants-111?lang=por" target="_blank" rel="noopener">Abrir Lição 125 — D&C 111 (Manual)</a></p>
+    </section>
+
+  </main>
+
+  <aside>
+    <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:12px">
+      <div style="flex:1">
+        <strong>Resumo rápido</strong>
+        <p class="small">Atividades: escala, leitura de contexto, grupos de versículos, conexões com Romanos/D&C, e jogo do dado.</p>
+      </div>
+    </div>
+
+    <div style="margin-bottom:12px" class="activity">
+      <h2 style="font-size:14px;margin-bottom:6px">Quem tirou o maior / menor?</h2>
+      <p class="small">Depois de rodar para todos (ou receber rolls do parceiro online), o sistema indica quem tirou maior e menor automaticamente.</p>
+      <div id="summaryBox" class="small muted">Nenhum roll ainda.</div>
+    </div>
+
+    <div class="activity">
+      <h2 style="font-size:14px;margin-bottom:6px">Dicas do professor</h2>
+      <ul class="small muted">
+        <li>Use o dado para escolher papéis (entrevistador/entrevistado).</li>
+        <li>Perguntas: "Que verdade aprendi?", "Que preocupações posso entregar ao Senhor?"</li>
+      </ul>
+    </div>
+
+    <div class="activity">
+      <h2 style="font-size:14px;margin-bottom:6px">Citações</h2>
+      <p class="small">Todas as citações / versículos abrem no site oficial para leitura em voz alta com a turma.</p>
+    </div>
+  </aside>
+
+  <div class="modal" id="modal">
+    <div class="box">
+      <h3 id="modalTitle">Título</h3>
+      <div id="modalBody" style="margin-top:8px"></div>
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px">
+        <button class="btn" id="closeModal">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Arquivo gerado para uso em aula. Link de referência: Manual do Professor — Doutrina e Convênios 111. 2
+  </footer>
+</div>
+
+<script>
+/* ---------- Helpers e UI ---------- */
+const $ = (sel)=>document.querySelector(sel);
+const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
+
+/* Escala */
+const scaleBtns = document.getElementById('scaleBtns');
+const scaleResult = document.getElementById('scaleResult');
+scaleBtns.addEventListener('click', e=>{
+  const b = e.target.closest('button');
+  if(!b) return;
+  const v = b.dataset.val;
+  scaleResult.textContent = 'Escolha registrada: ' + v + ' — discuta em duplas.';
+});
+
+/* Open lesson */
+$('#openLesson').addEventListener('click', ()=>window.open('https://www.churchofjesuschrist.org/study/manual/doctrine-and-covenants-seminary-teacher-manual-2025/401-doctrine-and-covenants-111?lang=por','_blank'));
+
+/* openLink */
+$$('.open-link').forEach(btn=>{
+  btn.addEventListener('click', e=>{
+    const link = e.currentTarget.dataset.link;
+    window.open(link,'_blank');
+  });
+});
+
+/* Players & dice logic */
+let players = [];
+let rolls = []; // {name, value, ts, source}
+
+function renderPlayers(){
+  const list = document.getElementById('playerList');
+  list.innerHTML = '';
+  players.forEach((p,idx)=>{
+    const div = document.createElement('div');
+    div.className='player';
+    div.innerHTML = `<strong>${p}</strong>
+      <button title="remover" style="background:transparent;border:none;color:var(--muted);cursor:pointer" data-idx="${idx}">✖</button>`;
+    list.appendChild(div);
+  });
+}
+$('#addPlayer').addEventListener('click', ()=>{
+  const name = $('#playerName').value.trim();
+  if(!name) return alert('Digite um nome.');
+  players.push(name);
+  $('#playerName').value='';
+  renderPlayers();
+});
+
+$('#playerList').addEventListener('click', e=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  const i = Number(btn.dataset.idx);
+  if(!Number.isFinite(i)) return;
+  players.splice(i,1);
+  renderPlayers();
+  renderRolls();
+});
+
+/* roll functions */
+function rollDie(){
+  return Math.floor(Math.random()*6)+1;
+}
+function addRoll(name, value, source='local'){
+  rolls.push({name, value, ts:Date.now(), source});
+  renderRolls();
+  updateSummary();
+  // if connected, send via datachannel - handled elsewhere (sendMessage)
+  try{ if(window.dc && window.dc.readyState==='open') window.dc.send(JSON.stringify({t:'roll', name, value})); }catch(e){}
+}
+function renderRolls(){
+  const container = document.getElementById('rollCards');
+  container.innerHTML='';
+  rolls.slice().reverse().forEach(r=>{
+    const card = document.createElement('div');
+    card.className='roll-card';
+    card.innerHTML = `<div style="display:flex;justify-content:space-between"><strong>${r.name}</strong><span class="small muted">${new Date(r.ts).toLocaleTimeString()}</span></div>
+      <div style="font-size:22px;margin-top:6px">${r.value} <span class="small muted">(${r.source})</span></div>`;
+    container.appendChild(card);
+  });
+}
+
+/* UI: die face & single roll */
+const dieFace = document.getElementById('dieFace');
+const lastResult = document.getElementById('lastResult');
+
+$('#rollBtn').addEventListener('click', ()=>{
+  if(players.length===0) return alert('Adicione ao menos um jogador.');
+  const choice = players[Math.floor(Math.random()*players.length)];
+  const v = rollDie();
+  dieFace.textContent = v;
+  lastResult.textContent = `${choice} tirou ${v}`;
+  addRoll(choice, v, 'local');
+});
+
+$('#rollAllBtn').addEventListener('click', ()=>{
+  if(players.length===0) return alert('Adicione jogadores.');
+  players.forEach(p=>{
+    const v = rollDie();
+    addRoll(p, v, 'local');
+  });
+  const last = rolls[rolls.length-1];
+  dieFace.textContent = last.value;
+  lastResult.textContent = `Último: ${last.name} tirou ${last.value}`;
+});
+
+$('#clearBtn').addEventListener('click', ()=>{
+  rolls = []; renderRolls(); dieFace.textContent='—'; lastResult.textContent='—'; updateSummary();
+});
+
+/* summary */
+function updateSummary(){
+  const box = document.getElementById('summaryBox');
+  if(rolls.length===0){ box.textContent='Nenhum roll ainda.'; return; }
+  // determine highest and lowest
+  const grouped = {};
+  rolls.forEach(r=>{ if(!grouped[r.name]) grouped[r.name]=[]; grouped[r.name].push(r.value); });
+  const latestPer = Object.keys(grouped).map(name=>{
+    const arr = grouped[name];
+    return {name, last:arr[arr.length-1]};
+  });
+  latestPer.sort((a,b)=>b.last-a.last);
+  const maior = latestPer[0];
+  const menor = latestPer[latestPer.length-1];
+  box.innerHTML = `<strong>Maior (último roll por jogador):</strong> ${maior.name} — ${maior.last}<br><strong>Menor:</strong> ${menor.name} — ${menor.last}`;
+}
+
+/* ---------- WebRTC manual signaling (peer-to-peer via copy/paste) ---------- */
+let pc = null;
+window.dc = null; // datachannel ref for easy access
+
+$('#createOffer').addEventListener('click', async ()=>{
+  try{
+    pc = new RTCPeerConnection();
+    const dc = pc.createDataChannel('sync');
+    window.dc = dc;
+    dc.onopen = ()=>{ console.log('dc open'); $('#sendSync').disabled=false; showModal('Conexão', 'Canal de dados aberto. Agora copie o SDP de oferta e envie para o outro participante.'); };
+    dc.onmessage = e=>handleIncoming(e.data);
+    pc.onicecandidate = event=>{
+      if(event.candidate===null){
+        // all ICE collected
+        $('#offerBox').textContent = JSON.stringify(pc.localDescription);
+      }
+    };
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+    $('#offerBox').textContent = 'Gerando SDP... aguardando candidatos ICE...';
+    // enable generateAnswer for remote side
+    $('#createAnswer').style.display='inline-block';
+  }catch(err){ alert('Erro ao criar oferta: '+err.message); }
+});
+
+$('#createAnswer').addEventListener('click', async ()=>{
+  // this button is shown to the peer who received an offer and will create the answer
+  try{
+    const text = prompt('Cole aqui a SDP/Oferta que você recebeu:');
+    if(!text) return;
+    const offerSDP = JSON.parse(text);
+    pc = new RTCPeerConnection();
+    pc.ondatachannel = (ev)=>{
+      const ch = ev.channel;
+      window.dc = ch;
+      ch.onopen = ()=>{ $('#sendSync').disabled=false; showModal('Conexão', 'Canal de dados aberto. Aguarde a troca de SDPs (resposta será gerada automaticamente).'); };
+      ch.onmessage = e=>handleIncoming(e.data);
+    };
+    pc.onicecandidate = event=>{
+      if(event.candidate===null){
+        $('#offerBox').textContent = JSON.stringify(pc.localDescription);
+      }
+    };
+    await pc.setRemoteDescription(offerSDP);
+    const answer = await pc.createAnswer();
+    await pc.setLocalDescription(answer);
+    // now offerBox shows the answer SDP for copy/paste back
+    $('#offerBox').textContent = 'Gerando resposta... aguarde candidatos ICE...';
+    $('#createAnswer').style.display='none';
+    $('#createOffer').style.display='inline-block';
+  }catch(err){ alert('Erro ao criar resposta: '+err.message); }
+});
+
+$('#applyRemote').addEventListener('click', async ()=>{
+  const txt = $('#remoteSDP').value.trim();
+  if(!txt) return alert('Cole a SDP remote primeiro.');
+  try{
+    const remote = JSON.parse(txt);
+    await pc.setRemoteDescription(remote);
+    showModal('SDP aplicada', 'SDP remota aplicada. Se ambos geraram as SDPs e trocaram, a conexão deve abrir em instantes.');
+  }catch(err){ alert('Erro ao aplicar SDP: '+err.message); }
+});
+
+/* send sync (manual) */
+$('#sendSync').addEventListener('click', ()=>{
+  if(!window.dc || window.dc.readyState!=='open') return alert('Canal não aberto.');
+  // send latest local rolls for each player as sync
+  const latest = {};
+  rolls.forEach(r=> latest[r.name] = r.value);
+  window.dc.send(JSON.stringify({t:'sync', data: latest}));
+  showModal('Enviado', 'Rolls locais enviados ao parceiro.');
+});
+
+/* handle incoming datachannel messages */
+function handleIncoming(raw){
+  try{
+    const msg = JSON.parse(raw);
+    if(msg.t==='roll'){ addRoll(msg.name, msg.value, 'peer'); }
+    else if(msg.t==='sync' && msg.data){
+      // integrate latest per-player values
+      Object.entries(msg.data).forEach(([name, value])=>{
+        addRoll(name, value, 'peer-sync');
+      });
+    } else {
+      console.log('msg unknown', msg);
+    }
+  }catch(e){
+    console.log('recv non-json', raw);
+  }
+}
+
+/* small modal helper */
+function showModal(title, html){
+  $('#modalTitle').textContent = title;
+  const mb = $('#modalBody');
+  if(typeof html === 'string') mb.innerHTML = html;
+  else { mb.innerHTML = ''; mb.appendChild(html); }
+  $('#modal').style.display='flex';
+}
+$('#closeModal').addEventListener('click', ()=>$('#modal').style.display='none');
+
+/* when receiving messages while creating offer/answer manually, user may want the SDP text from #offerBox: allow clicking to copy */
+document.getElementById('offerBox').addEventListener('click', ()=>{
+  const text = document.getElementById('offerBox').textContent;
+  if(!text || text==='—') return;
+  navigator.clipboard?.writeText(text).then(()=> showModal('Copiado', 'SDP copiada para a área de transferência. Cole-a e envie ao parceiro.'));
+});
+
+/* small UX: allow clicking a roll card to set die face */
+document.getElementById('rollCards').addEventListener('click', e=>{
+  const card = e.target.closest('.roll-card');
+  if(!card) return;
+  const vMatch = card.textContent.match(/(\d+)/);
+  if(vMatch){ dieFace.textContent = vMatch[1]; }
+});
+
+/* Accessibility: keyboard enter on playerName to add */
+$('#playerName').addEventListener('keydown', (ev)=>{ if(ev.key==='Enter'){ ev.preventDefault(); $('#addPlayer').click(); } });
+
+/* Auto sample: add 2 players for demo */
+if(players.length===0){
+  players.push('Aluno A'); players.push('Aluno B');
+  renderPlayers();
+}
+
+</script>
+</body>
+</html>
