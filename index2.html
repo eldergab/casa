@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conduzidos Pela Mão do Senhor - Noite Familiar</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; color: #333; margin: 0; padding: 0; }
+    header { background: #295f98; color: white; padding: 20px; text-align: center; }
+    main { padding: 20px; max-width: 800px; margin: auto; }
+    .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    button { background: #295f98; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 16px; }
+    button:hover { background: #1d4571; }
+    .hidden { display: none; }
+    footer { text-align: center; padding: 10px; font-size: 14px; color: #666; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Conduzidos Pela Mão do Senhor</h1>
+    <p>Doutrina e Convênios 111–114 — Noite Familiar</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>🎯 Objetivo</h2>
+      <p>Aprender como o Senhor ordena todas as coisas para o nosso bem e nos conduz pela mão quando somos humildes e fiéis.</p>
+    </section>
+
+    <section class="card">
+      <h2>🧩 Rodada 1 – Tesouros do Senhor (D&C 111)</h2>
+      <button onclick="mostrar('r1')">Mostrar Pergunta</button>
+      <div id="r1" class="hidden">
+        <p><strong>Pergunta:</strong> Que tipo de tesouros o Senhor ajuda Joseph Smith a encontrar em Salem?</p>
+        <p><strong>Desafio:</strong> Cada participante cita um “tesouro espiritual” que o Senhor já colocou em sua vida.</p>
+        <blockquote>“Eu ordenarei todas as coisas para o teu bem.” — Doutrina e Convênios 111:11</blockquote>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>🙏 Rodada 2 – Humildade em Ação (D&C 112:10)</h2>
+      <button onclick="mostrar('r2')">Mostrar Atividade</button>
+      <div id="r2" class="hidden">
+        <p><strong>Atividade:</strong> Venda os olhos de alguém e conduza-o cuidadosamente pela mão por um pequeno percurso com cadeiras ou objetos. Depois conversem: o que aprendemos sobre confiar no Senhor?</p>
+        <blockquote>“Sê humilde; e o Senhor teu Deus te conduzirá pela mão.” — Doutrina e Convênios 112:10</blockquote>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>🤝 Rodada 3 – O Teste de Thomas B. Marsh (D&C 112:3–15)</h2>
+      <button onclick="mostrar('r3')">Mostrar Pergunta</button>
+      <div id="r3" class="hidden">
+        <p><strong>Quiz:</strong> Por que Thomas B. Marsh ficou magoado? Como o Senhor o ajudou a perdoar e seguir adiante?</p>
+        <p><strong>Desafio:</strong> O que você faz quando sente que alguém o tratou injustamente?</p>
+        <blockquote>“O Senhor me abençoa se eu humildemente busco fazer Sua vontade.”</blockquote>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>🌿 Rodada 4 – Conhecer o Salvador (D&C 112:12–26)</h2>
+      <button onclick="mostrar('r4')">Mostrar Pergunta</button>
+      <div id="r4" class="hidden">
+        <p><strong>Pergunta:</strong> Qual a diferença entre saber sobre Cristo e conhecer Cristo?</p>
+        <p><strong>Desafio:</strong> Compartilhe uma experiência em que sentiu o Senhor guiando você pela mão.</p>
+        <blockquote>“As pessoas realmente convertidas passam a conhecer Jesus Cristo.”</blockquote>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>💎 Rodada Final – Ordenarei Todas as Coisas para o Vosso Bem</h2>
+      <button onclick="mostrar('r5')">Mostrar Desafio</button>
+      <div id="r5" class="hidden">
+        <p>Cada família escreve ou desenha um momento difícil que acabou trazendo uma bênção. Compartilhem e descubram como o Senhor ‘ordenou todas as coisas para o bem’.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>👧 Para Crianças</h2>
+      <ul>
+        <li>Cantar <em>“Sê Humilde”</em> (Hinos nº 74).</li>
+        <li>Desenhar o tema: <strong>“O Senhor me conduz pela mão”</strong>.</li>
+        <li>Verso para memorizar: Doutrina e Convênios 112:10.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Inspirado em Doutrina e Convênios 111–114 | A Igreja de Jesus Cristo dos Santos dos Últimos Dias</p>
+  </footer>
+
+  <script>
+    function mostrar(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('hidden');
+    }
+  </script>
+</body>
+</html>
