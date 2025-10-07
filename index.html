@@ -47,7 +47,6 @@
       font-size: 0.95rem;
     }
 
-    /* Layout principal */
     .grid {
       display: grid;
       grid-template-columns: 1fr 340px;
@@ -59,59 +58,6 @@
       padding: 16px;
       border-radius: 12px;
       box-shadow: 0 6px 18px rgba(2,6,23,0.6);
-    }
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    label {
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    select,
-    input[type=number],
-    input[type=text],
-    input:not([type]),
-    input::placeholder {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: var(--glass);
-      color: inherit;
-      font-size: 1rem;
-    }
-
-    button {
-      background: var(--accent);
-      border: none;
-      padding: 10px 14px;
-      border-radius: 10px;
-      color: #04233b;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: 0.2s;
-    }
-
-    button:active {
-      transform: scale(0.97);
-      opacity: 0.9;
-    }
-
-    button.secondary {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.1);
-      color: var(--muted);
-    }
-
-    ul {
-      padding-left: 18px;
-      margin: 6px 0;
     }
 
     .game-area {
@@ -146,10 +92,17 @@
       cursor: pointer;
       text-align: center;
       background: rgba(255,255,255,0.02);
+      transition: 0.2s;
     }
 
-    .choice:active {
-      background: rgba(96,165,250,0.15);
+    .choice:hover {
+      background: rgba(96,165,250,0.1);
+    }
+
+    .choice.selected {
+      background: var(--accent);
+      color: #04233b;
+      font-weight: 600;
     }
 
     .small {
@@ -234,8 +187,51 @@
   </style>
 </head>
 <body>
-  <!-- corpo HTML original (sem mudanças estruturais) -->
-  <!-- copie exatamente o conteúdo do <body> e <script> do seu código -->
-  <!-- pois a responsividade está 100% no CSS acima -->
+  <div class="wrap">
+    <header>
+      <h1>Noite Familiar — Jogos</h1>
+      <p class="lead">Escolha a resposta correta e acumule pontos!</p>
+    </header>
+
+    <div class="grid">
+      <!-- Área do jogo -->
+      <div class="card game-area">
+        <div class="panel">
+          <p class="question">Qual é a capital do Brasil?</p>
+          <div class="choices">
+            <div class="choice">São Paulo</div>
+            <div class="choice">Brasília</div>
+            <div class="choice">Rio de Janeiro</div>
+            <div class="choice">Belo Horizonte</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Placar -->
+      <aside class="card scoreboard">
+        <div class="player">
+          <span>Jogador 1</span>
+          <span class="timer">00:30</span>
+        </div>
+        <div class="player">
+          <span>Jogador 2</span>
+          <span class="timer">00:30</span>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="note">Desenvolvido para a Noite Familiar</footer>
+  </div>
+
+  <script>
+    // Função simples para marcar escolha selecionada
+    const choices = document.querySelectorAll('.choice');
+    choices.forEach(choice => {
+      choice.addEventListener('click', () => {
+        choices.forEach(c => c.classList.remove('selected'));
+        choice.classList.add('selected');
+      });
+    });
+  </script>
 </body>
 </html>
