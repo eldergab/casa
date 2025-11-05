@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulário de Preparação Missionária</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fb;
+      margin: 20px;
+      color: #222;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #0d47a1;
+    }
+    section {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      margin-bottom: 25px;
+    }
+    label {
+      display: block;
+      margin: 6px 0;
+    }
+    button {
+      display: block;
+      margin: 25px auto;
+      padding: 12px 25px;
+      background-color: #0d47a1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1565c0;
+    }
+    .identificacao {
+      background-color: #e3f2fd;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Formulário de Preparação Missionária</h1>
+
+  <div class="identificacao">
+    <label>Nome: <input type="text" id="nome" placeholder="Digite seu nome" required></label>
+    <label>Ala: <input type="text" id="ala" placeholder="Digite o nome da sua Ala" required></label>
+    <p><strong>Data:</strong> <span id="dataAtual"></span></p>
+  </div>
+
+  <form id="preparacaoForm">
+
+    <section>
+      <h2>✅ O que preciso adquirir antes da missão</h2>
+      <label><input type="checkbox" value="Aprender a estudar as escrituras diariamente"> Aprender a estudar as escrituras diariamente</label>
+      <label><input type="checkbox" value="Ter o hábito da oração pessoal e familiar"> Ter o hábito da oração pessoal e familiar</label>
+      <label><input type="checkbox" value="Desenvolver o amor ao serviço e às pessoas"> Desenvolver o amor ao serviço e às pessoas</label>
+      <label><input type="checkbox" value="Aprender a trabalhar em equipe"> Aprender a trabalhar em equipe</label>
+      <label><input type="checkbox" value="Praticar obediência e disciplina diária"> Praticar obediência e disciplina diária</label>
+      <label><input type="checkbox" value="Guardar os mandamentos com fidelidade"> Guardar os mandamentos com fidelidade</label>
+      <label><input type="checkbox" value="Fortalecer o testemunho de Jesus Cristo"> Fortalecer o testemunho de Jesus Cristo</label>
+      <label><input type="checkbox" value="Ter controle financeiro e aprender a economizar"> Ter controle financeiro e aprender a economizar</label>
+      <label><input type="checkbox" value="Buscar saúde física e emocional"> Buscar saúde física e emocional</label>
+      <label><input type="checkbox" value="Aprender a viver longe de casa com responsabilidade"> Aprender a viver longe de casa com responsabilidade</label>
+    </section>
+
+    <section>
+      <h2>🌟 O que já consegui realizar para ser um missionário bem-sucedido</h2>
+      <label><input type="checkbox" value="Leio o Livro de Mórmon e sinto o Espírito"> Leio o Livro de Mórmon e sinto o Espírito</label>
+      <label><input type="checkbox" value="Participo dignamente da Santa Ceia toda semana"> Participo dignamente da Santa Ceia toda semana</label>
+      <label><input type="checkbox" value="Sirvo em meu chamado na ala"> Sirvo em meu chamado na ala</label>
+      <label><input type="checkbox" value="Tenho um testemunho pessoal de Cristo e da Expiação"> Tenho um testemunho pessoal de Cristo e da Expiação</label>
+      <label><input type="checkbox" value="Participo de atividades e serviço da igreja"> Participo de atividades e serviço da igreja</label>
+      <label><input type="checkbox" value="Tenho autocontrole e evito tentações"> Tenho autocontrole e evito tentações</label>
+      <label><input type="checkbox" value="Ajudo minha família e sou exemplo em casa"> Ajudo minha família e sou exemplo em casa</label>
+      <label><input type="checkbox" value="Economizei parte do dinheiro para a missão"> Economizei parte do dinheiro para a missão</label>
+      <label><input type="checkbox" value="Faço metas pessoais e espirituais"> Faço metas pessoais e espirituais</label>
+      <label><input type="checkbox" value="Participo de seminário ou instituto"> Participo de seminário ou instituto</label>
+    </section>
+
+    <button type="button" onclick="enviarWhatsApp()">Enviar pelo WhatsApp</button>
+  </form>
+
+  <script>
+    // Exibe a data atual
+    document.getElementById('dataAtual').innerText = new Date().toLocaleDateString('pt-BR');
+
+    function enviarWhatsApp() {
+      const nome = document.getElementById("nome").value;
+      const ala = document.getElementById("ala").value;
+      const data = document.getElementById("dataAtual").innerText;
+
+      const selecionados = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
+        .map(el => "✅ " + el.value)
+        .join("%0A");
+
+      const mensagem = `*Formulário de Preparação Missionária*%0A%0A` +
+        `👤 Nome: ${nome}%0A🏠 Ala: ${ala}%0A📅 Data: ${data}%0A%0A` +
+        `*Respostas marcadas:*%0A${selecionados}`;
+
+      const telefone = "5562920026981";
+      const url = `https://wa.me/${telefone}?text=${mensagem}`;
+      window.open(url, "_blank");
+    }
+  </script>
+
+</body>
+</html>
