@@ -1,129 +1,165 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário de Autoavaliação e Guia Pós-Missão do Missionário Retornado</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7f8;
-            margin: 0;
-            padding: 20px;
-        }
-        form {
-            background: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h2 {
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 5px;
-        }
-        .section {
-            margin-bottom: 25px;
-        }
-        label {
-            display: block;
-            margin: 8px 0;
-        }
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0 15px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia Pós-Missão – Vida Equilibrada do Missionário Retornado</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9fafb;
+      color: #222;
+    }
+    h1 {
+      text-align: center;
+      color: #0d47a1;
+    }
+    h2 {
+      margin-top: 25px;
+      color: #1565c0;
+    }
+    section {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 6px 0;
+    }
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 12px 25px;
+      background-color: #0d47a1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1565c0;
+    }
+    .identificacao {
+      background-color: #e3f2fd;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+    }
+  </style>
 </head>
 <body>
-    <form id="avaliacaoForm">
-        <h2>Identificação</h2>
-        <div class="section">
-            <label for="nome">Nome Completo:</label>
-            <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
 
-            <label for="ala">Ala/Ramo:</label>
-            <input type="text" id="ala" name="ala" placeholder="Informe sua ala ou ramo" required>
-        </div>
+  <h1>Guia Pós-Missão – Vida Equilibrada do Missionário Retornado</h1>
 
-        <h2>Parte 1 – Bênçãos e Capacidades do Missionário</h2>
-        <div class="section">
-            <p>Marque as bênçãos e capacidades que você acredita ter recebido e desenvolvido durante sua missão:</p>
-            <label><input type="checkbox" name="bencaos" value="Testemunho fortalecido"> Testemunho fortalecido de Jesus Cristo</label>
-            <label><input type="checkbox" name="bencaos" value="Disciplina e obediência"> Maior disciplina e obediência</label>
-            <label><input type="checkbox" name="bencaos" value="Amor ao próximo"> Amor e empatia pelo próximo</label>
-            <label><input type="checkbox" name="bencaos" value="Habilidade de ensino"> Habilidade de ensinar e comunicar o evangelho</label>
-            <label><input type="checkbox" name="bencaos" value="Trabalho em equipe"> Espírito de cooperação e trabalho em equipe</label>
-            <label><input type="checkbox" name="bencaos" value="Autodomínio"> Autodomínio e controle emocional</label>
-            <label><input type="checkbox" name="bencaos" value="Serviço"> Desejo contínuo de servir</label>
-            <label><input type="checkbox" name="bencaos" value="Conhecimento das escrituras"> Conhecimento das escrituras</label>
-            <label><input type="checkbox" name="bencaos" value="Fé e perseverança"> Fé e perseverança em desafios</label>
-            <label><input type="checkbox" name="bencaos" value="Capacidade de liderança"> Capacidade de liderança e exemplo</label>
-        </div>
+  <div class="identificacao">
+    <label>Nome: <input type="text" id="nome" placeholder="Digite seu nome" required></label>
+    <label>Ala: <input type="text" id="ala" placeholder="Digite o nome da sua Ala" required></label>
+    <p><strong>Data:</strong> <span id="dataAtual"></span></p>
+  </div>
 
-        <h2>Parte 2 – Guia Pós-Missão</h2>
-        <div class="section">
-            <p>Marque o que você está praticando atualmente em sua vida pessoal e familiar após retornar da missão:</p>
+  <form id="guiaForm">
 
-            <h3>Espiritual</h3>
-            <label><input type="checkbox" name="posmissao" value="Ora diariamente e estuda as escrituras"> Ora diariamente e estuda as escrituras</label>
-            <label><input type="checkbox" name="posmissao" value="Frequenta o templo regularmente"> Frequenta o templo regularmente</label>
-            <label><input type="checkbox" name="posmissao" value="Participa ativamente na Igreja"> Participa ativamente nas reuniões e chamados</label>
-            <label><input type="checkbox" name="posmissao" value="Serve ao próximo"> Serve aos outros regularmente</label>
+    <section>
+      <h2>🕊️ Área Espiritual</h2>
+      <label><input type="checkbox" value="Oro pessoalmente todos os dias"> Oro pessoalmente todos os dias</label>
+      <label><input type="checkbox" value="Estudo o Livro de Mórmon diariamente"> Estudo o Livro de Mórmon diariamente</label>
+      <label><input type="checkbox" value="Participo das reuniões dominicais"> Participo das reuniões dominicais</label>
+      <label><input type="checkbox" value="Faço noite familiar semanal"> Faço noite familiar semanal</label>
+      <label><input type="checkbox" value="Faço jejum mensal com propósito"> Faço jejum mensal com propósito</label>
+      <label><input type="checkbox" value="Participo de ordenanças do templo regularmente"> Participo de ordenanças do templo regularmente</label>
+      <label><input type="checkbox" value="Faço visitas ou ministro a pessoas em necessidade"> Faço visitas ou ministro a pessoas em necessidade</label>
+      <label><input type="checkbox" value="Ensino o evangelho à minha família"> Ensino o evangelho à minha família</label>
+      <label><input type="checkbox" value="Sigo o Espírito Santo em minhas decisões"> Sigo o Espírito Santo em minhas decisões</label>
+      <label><input type="checkbox" value="Participo de atividades de serviço da ala"> Participo de atividades de serviço da ala</label>
+    </section>
 
-            <h3>Físico</h3>
-            <label><input type="checkbox" name="posmissao" value="Mantém hábitos saudáveis"> Mantém bons hábitos de saúde (sono, alimentação, exercícios)</label>
-            <label><input type="checkbox" name="posmissao" value="Mantém disciplina pessoal"> Mantém disciplina e rotina saudável</label>
+    <section>
+      <h2>💪 Área Física</h2>
+      <label><input type="checkbox" value="Faço exercícios físicos regulares"> Faço exercícios físicos regulares</label>
+      <label><input type="checkbox" value="Cuido da alimentação com moderação"> Cuido da alimentação com moderação</label>
+      <label><input type="checkbox" value="Durmo o suficiente todas as noites"> Durmo o suficiente todas as noites</label>
+      <label><input type="checkbox" value="Evito substâncias prejudiciais à saúde"> Evito substâncias prejudiciais à saúde</label>
+      <label><input type="checkbox" value="Faço exames médicos e cuido do corpo"> Faço exames médicos e cuido do corpo</label>
+      <label><input type="checkbox" value="Ajudo minha família a ter hábitos saudáveis"> Ajudo minha família a ter hábitos saudáveis</label>
+      <label><input type="checkbox" value="Participo de recreações familiares"> Participo de recreações familiares</label>
+      <label><input type="checkbox" value="Cuido da aparência com dignidade"> Cuido da aparência com dignidade</label>
+      <label><input type="checkbox" value="Uso o tempo com sabedoria"> Uso o tempo com sabedoria</label>
+      <label><input type="checkbox" value="Trabalho ou estudo com disciplina"> Trabalho ou estudo com disciplina</label>
+    </section>
 
-            <h3>Intelectual</h3>
-            <label><input type="checkbox" name="posmissao" value="Continua estudando"> Continua estudando ou aprendendo novas habilidades</label>
-            <label><input type="checkbox" name="posmissao" value="Define metas profissionais"> Define metas profissionais e espirituais</label>
+    <section>
+      <h2>🧠 Área Intelectual</h2>
+      <label><input type="checkbox" value="Leio livros edificantes e inspiradores"> Leio livros edificantes e inspiradores</label>
+      <label><input type="checkbox" value="Busco conhecimento em minha profissão"> Busco conhecimento em minha profissão</label>
+      <label><input type="checkbox" value="Participo de cursos ou treinamentos"> Participo de cursos ou treinamentos</label>
+      <label><input type="checkbox" value="Estudo as escrituras com profundidade"> Estudo as escrituras com profundidade</label>
+      <label><input type="checkbox" value="Estimulo o aprendizado na família"> Estimulo o aprendizado na família</label>
+      <label><input type="checkbox" value="Ensino algo novo aos familiares"> Ensino algo novo aos familiares</label>
+      <label><input type="checkbox" value="Desenvolvo talentos e habilidades"> Desenvolvo talentos e habilidades</label>
+      <label><input type="checkbox" value="Faço metas de progresso pessoal"> Faço metas de progresso pessoal</label>
+      <label><input type="checkbox" value="Anoto aprendizados espirituais"> Anoto aprendizados espirituais</label>
+      <label><input type="checkbox" value="Escuto conselhos e aprendo com outros"> Escuto conselhos e aprendo com outros</label>
+    </section>
 
-            <h3>Social e Emocional</h3>
-            <label><input type="checkbox" name="posmissao" value="Cultiva amizades saudáveis"> Cultiva amizades saudáveis e edificantes</label>
-            <label><input type="checkbox" name="posmissao" value="Participa de atividades familiares"> Participa ativamente das atividades familiares</label>
-            <label><input type="checkbox" name="posmissao" value="Serve com a família"> Serve em conjunto com sua família</label>
-            <label><input type="checkbox" name="posmissao" value="Mantém equilíbrio emocional"> Busca equilíbrio emocional e espiritual</label>
-        </div>
+    <section>
+      <h2>🤝 Área Social</h2>
+      <label><input type="checkbox" value="Cumprimento e conheço novos membros na ala"> Cumprimento e conheço novos membros na ala</label>
+      <label><input type="checkbox" value="Mantenho amizades saudáveis"> Mantenho amizades saudáveis</label>
+      <label><input type="checkbox" value="Participo de atividades da ala ou estaca"> Participo de atividades da ala ou estaca</label>
+      <label><input type="checkbox" value="Sou um bom exemplo no trabalho e escola"> Sou um bom exemplo no trabalho e escola</label>
+      <label><input type="checkbox" value="Sirvo ativamente em meu chamado"> Sirvo ativamente em meu chamado</label>
+      <label><input type="checkbox" value="Dedico tempo à convivência familiar"> Dedico tempo à convivência familiar</label>
+      <label><input type="checkbox" value="Demonstro gratidão e bondade"> Demonstro gratidão e bondade</label>
+      <label><input type="checkbox" value="Escuto os outros com empatia"> Escuto os outros com empatia</label>
+      <label><input type="checkbox" value="Ajudo os necessitados"> Ajudo os necessitados</label>
+      <label><input type="checkbox" value="Convido amigos a conhecer o evangelho"> Convido amigos a conhecer o evangelho</label>
+    </section>
 
-        <button type="button" onclick="enviarWhatsApp()">Enviar pelo WhatsApp</button>
-    </form>
+    <section>
+      <h2>💖 Área Emocional</h2>
+      <label><input type="checkbox" value="Sou paciente e calmo nas dificuldades"> Sou paciente e calmo nas dificuldades</label>
+      <label><input type="checkbox" value="Expresso gratidão diariamente"> Expresso gratidão diariamente</label>
+      <label><input type="checkbox" value="Evito murmurar e reclamar"> Evito murmurar e reclamar</label>
+      <label><input type="checkbox" value="Confio no Senhor em tempos difíceis"> Confio no Senhor em tempos difíceis</label>
+      <label><input type="checkbox" value="Peço perdão e perdoo prontamente"> Peço perdão e perdoo prontamente</label>
+      <label><input type="checkbox" value="Demonstro amor à minha família"> Demonstro amor à minha família</label>
+      <label><input type="checkbox" value="Busco equilíbrio entre trabalho e descanso"> Busco equilíbrio entre trabalho e descanso</label>
+      <label><input type="checkbox" value="Converso sobre sentimentos com pessoas de confiança"> Converso sobre sentimentos com pessoas de confiança</label>
+      <label><input type="checkbox" value="Evito ambientes e conteúdos negativos"> Evito ambientes e conteúdos negativos</label>
+      <label><input type="checkbox" value="Reflito sobre minhas metas e progresso"> Reflito sobre minhas metas e progresso</label>
+    </section>
 
-    <script>
-        function enviarWhatsApp() {
-            const nome = document.getElementById('nome').value.trim();
-            const ala = document.getElementById('ala').value.trim();
+    <button type="button" onclick="enviarWhatsApp()">Enviar pelo WhatsApp</button>
+  </form>
 
-            if (!nome || !ala) {
-                alert('Por favor, preencha seu nome e ala antes de enviar.');
-                return;
-            }
+  <script>
+    // Define data atual
+    document.getElementById('dataAtual').innerText = new Date().toLocaleDateString('pt-BR');
 
-            const selecionados = [];
-            document.querySelectorAll('input[type=checkbox]:checked').forEach(c => selecionados.push(c.value));
+    function enviarWhatsApp() {
+      const nome = document.getElementById("nome").value;
+      const ala = document.getElementById("ala").value;
+      const data = document.getElementById("dataAtual").innerText;
 
-            const mensagem = encodeURIComponent(`📝 *Formulário de Autoavaliação e Guia Pós-Missão*\n\n👤 Nome: ${nome}\n🏠 Ala/Ramo: ${ala}\n\nRespostas:\n- ${selecionados.join("\n- ")}`);
-            const numero = '5562920026981';
-            const url = `https://wa.me/${numero}?text=${mensagem}`;
-            window.open(url, '_blank');
-        }
-    </script>
+      const selecionados = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
+        .map(el => "✅ " + el.value)
+        .join("%0A");
+
+      const mensagem = `*Guia Pós-Missão – Vida Equilibrada*%0A%0A` +
+        `👤 Nome: ${nome}%0A🏠 Ala: ${ala}%0A📅 Data: ${data}%0A%0A` +
+        `*Itens marcados:*%0A${selecionados}`;
+
+      const telefone = "5562920026981";
+      const url = `https://wa.me/${telefone}?text=${mensagem}`;
+
+      window.open(url, "_blank");
+    }
+  </script>
+
 </body>
 </html>
