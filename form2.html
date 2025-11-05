@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Formulário - Bênçãos e Capacidades do Missionário</title>
+  <style>
+    :root{--bg:#f6f7fb;--card:#ffffff;--muted:#6b7280;--accent:#0f172a}
+    body{font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);margin:0;padding:24px;color:var(--accent)}
+    .container{max-width:900px;margin:0 auto}
+    .card{background:var(--card);border-radius:12px;padding:22px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+    h1{margin:0 0 6px;font-size:20px}
+    p.lead{margin:0 0 18px;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .section{border:1px solid #eef2ff;padding:14px;border-radius:10px}
+    .section h2{font-size:16px;margin:0 0 8px}
+    label.item{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:8px;margin-bottom:6px}
+    input[type="checkbox"]{width:18px;height:18px}
+    .controls{display:flex;gap:10px;align-items:center;margin-top:14px}
+    input[type="text"],input[type="date"],textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #e6eef8}
+    textarea{min-height:90px}
+    .btn{background:#0b74ff;color:white;padding:8px 14px;border-radius:8px;border:0;cursor:pointer}
+    .btn.ghost{background:transparent;color:#0b74ff;border:1px solid #cfe0ff}
+    .summary{margin-top:16px;padding:12px;background:#fbfdff;border-radius:8px;border:1px dashed #dbeafe;color:#08306b}
+    @media (max-width:700px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Formulário: Bênçãos recebidas e capacidades para o lar</h1>
+      <p class="lead">Marque as bênçãos que recebeu durante a missão e marque também as capacidades que você sente que pode aplicar em seu próprio lar.</p>
+
+      <form id="missionForm">
+        <div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap">
+          <input type="text" id="name" name="name" placeholder="Nome completo" required style="flex:1;min-width:220px" />
+          <input type="text" id="mission" name="mission" placeholder="Missão (ex: São Paulo Norte)" style="min-width:220px" />
+          <input type="date" id="finished" name="finished" title="Data de retorno da missão" />
+        </div>
+
+        <div class="grid">
+          <div class="section">
+            <h2>Bênçãos recebidas na missão (marque todas que se aplicam)</h2>
+            <label class="item"><input type="checkbox" name="blessings" value="Testemunho fortalecido"> Testemunho fortalecido</label>
+            <label class="item"><input type="checkbox" name="blessings" value="Crescimento espiritual"> Crescimento espiritual</label>
+            <label class="item"><input type="checkbox" name="blessings" value="Amor ampliado"> Amor ampliado</label>
+            <label class="item"><input type="checkbox" name="blessings" value="Sentido de proposito"> Sentido de propósito</label>
+            <label class="item"><input type="checkbox" name="blessings" value="Amizades duradouras"> Amizades duradouras</label>
+            <label class="item"><input type="checkbox" name="blessings" value="Habilidades de ensino"> Habilidades de ensino</label>
+            <label class="item"><input type="checkbox" name="blessings" value="Confiança e resiliência"> Confiança e resiliência</label>
+            <label class="item"><input type="checkbox" name="blessings" value="Desejo de servir na igreja"> Desejo de servir na Igreja</label>
+            <label class="item"><input type="checkbox" name="blessings" value="Maior desejo de templo e família eterna"> Maior desejo de templo e família eterna</label>
+            <label class="item"><input type="checkbox" name="blessings" value="Recompensa de alegria por trazer almas"> Alegria por trazer almas a Cristo</label>
+          </div>
+
+          <div class="section">
+            <h2>Capacidades que posso aplicar no lar (marque todas que se aplicam)</h2>
+            <label class="item"><input type="checkbox" name="skills" value="Ensinar escrituras"> Ensinar escrituras em família</label>
+            <label class="item"><input type="checkbox" name="skills" value="Liderança espiritual"> Liderança espiritual</label>
+            <label class="item"><input type="checkbox" name="skills" value="Organização e disciplina"> Organização e disciplina</label>
+            <label class="item"><input type="checkbox" name="skills" value="Conselho e orientação"> Conselho e orientação espiritual</label>
+            <label class="item"><input type="checkbox" name="skills" value="Servir e voluntariado"> Servir e coordenar serviço familiar</label>
+            <label class="item"><input type="checkbox" name="skills" value="Ensino de Habilidades sociais"> Ensino de habilidades sociais e de comunicação</label>
+            <label class="item"><input type="checkbox" name="skills" value="Preparar familiares para missão"> Preparar outros para missões (treinamento)</label>
+            <label class="item"><input type="checkbox" name="skills" value="Trabalhar com jovens"> Trabalho com jovens ou aulas da Primária/Mutâo</label>
+            <label class="item"><input type="checkbox" name="skills" value="Manejo de conflitos"> Manejo de conflitos e reconciliação" > Manejo de conflitos e reconciliação</label>
+            <label class="item"><input type="checkbox" name="skills" value="Exemplo de convênios"> Ser exemplo de covênios e valores do templo</label>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <label for="other">Outras bênçãos ou capacidades (descreva brevemente):</label>
+          <textarea id="other" name="other" placeholder="Ex.: Aprendi a organizar lares de estudo, a administrar tempo, etc."></textarea>
+        </div>
+
+        <div class="controls">
+          <button type="button" class="btn" id="preview">Visualizar resumo</button>
+          <button type="button" class="btn ghost" id="clear">Limpar</button>
+          <button type="submit" class="btn">Enviar</button>
+        </div>
+
+        <div id="result" class="summary" style="display:none"></div>
+      </form>
+
+      <script>
+        const form = document.getElementById('missionForm');
+        const preview = document.getElementById('preview');
+        const clear = document.getElementById('clear');
+        const result = document.getElementById('result');
+
+        function getCheckedValues(name){
+          return Array.from(document.querySelectorAll('input[name="'+name+'"]:checked')).map(el=>el.value);
+        }
+
+        preview.addEventListener('click', ()=>{
+          const name = document.getElementById('name').value || '(sem nome)';
+          const mission = document.getElementById('mission').value || '(não informado)';
+          const finished = document.getElementById('finished').value || '(data não informada)';
+          const blessings = getCheckedValues('blessings');
+          const skills = getCheckedValues('skills');
+          const other = document.getElementById('other').value;
+
+          result.style.display = 'block';
+          result.innerHTML = `<strong>${name}</strong><br>Missão: ${mission} — Retornou em: ${finished}<br><br>
+            <strong>Bênçãos marcadas (${blessings.length}):</strong> ${blessings.length?blessings.join(', '):'<em>nenhuma</em>'}<br>
+            <strong>Capacidades para o lar (${skills.length}):</strong> ${skills.length?skills.join(', '):'<em>nenhuma</em>'}<br>
+            ${other?('<br><strong>Outras observações:</strong><br>'+escapeHtml(other)) : ''}`;
+        });
+
+        clear.addEventListener('click', ()=>{ form.reset(); result.style.display='none'; });
+
+        form.addEventListener('submit', (e)=>{
+          e.preventDefault();
+          // Em ambiente real, aqui você poderia enviar via fetch para um servidor.
+          preview.click();
+          alert('Formulário processado localmente. Copie o resumo se desejar salvá-lo.');
+        });
+
+        function escapeHtml(str){ return String(str).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]; }); }
+      </script>
+
+    </div>
+  </div>
+</body>
+</html>
