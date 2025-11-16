@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Meu Caminho para o Templo</title>
+<style>
+  body { font-family: sans-serif; background: #f2f7ff; margin: 0; }
+  
+  .carousel {
+    position: relative;
+    width: 100%;
+    max-width: 320px; /* <<< reduzido para não vazar imagem */
+    margin: auto;
+    overflow: hidden; /* <<< impede mostrar a imagem do lado */
+  }
+
+  .slides {
+    display: flex;
+    transition: transform 0.4s ease;
+  }
+
+  .slide {
+    min-width: 100%;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .slide img {
+    width: 100%;  /* <<< imagem ocupa totalmente o slide */
+    max-width: 260px;
+    margin-bottom: 10px;
+  }
+
+  .title {
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+
+  .nav { text-align: center; margin-top: 10px; }
+  button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #4a90e2;
+    color: white;
+  }
+</style>
+
+</head>
+<body>
+<h2 style="text-align:center;">Meu Caminho para o Templo</h2>
+<div class="carousel">
+  <div class="slides" id="slides">
+    <!-- 18 slides -->
+    <div class="slide"><img src="img1.png" /><div class="title">DEVO ME PREPARAR PARA ENTRAR NO TEMPLO</div></div>
+    <div class="slide"><img src="img2.png" /><div class="title">NO ANO QUE  FAREI 12 ANOS</div></div>
+ <div class="slide"><img src="img0.png" /><div class="title">O QUE FAREI NO TEMPLO?</div></div>
+    <div class="slide"><img src="img3.png" /><div class="title">BATISMO VICÁRIO E CONFIRMAÇÃO</div></div>
+    <div class="slide"><img src="img4.png" /><div class="title">PARA ISTO TENHO QUE TER UMA PREPARAÇÃO</div></div>
+    <div class="slide"><img src="img5.png" /><div class="title">DEVOLVER O DIZIMO</div></div>
+    <div class="slide"><img src="img6.png" /><div class="title">HONESTO</div></div>
+    <div class="slide"><img src="img7.png" /><div class="title">VIVER A PALAVRA DE SABEDORIA</div></div>
+    <div class="slide"><img src="img8.png" /><div class="title">VIVER A LEI DA CASTIDADE</div></div>
+    <div class="slide"><img src="img9.png" /><div class="title"> TER FÉ EM JESUS CRISTO</div></div>
+    <div class="slide"><img src="img10.png" /><div class="title">APOIAR O PROFETA</div></div>
+    <div class="slide"><img src="img11.png" /><div class="title">IR A IGREJA</div></div>
+    <div class="slide"><img src="img12.png" /><div class="title">SE EXEMPLO E CASA</div></div>
+    <div class="slide"><img src="img13.png" /><div class="title">PROCURAR O BISPO</div></div>
+    <div class="slide"><img src="img14.png" /><div class="title">TER UMA RECOMENDAÇÃO</div></div>
+    <div class="slide"><img src="img15.png" /><div class="title">RESPONDER SIM HONESTAMENTE</div></div>
+    <div class="slide"><img src="img16.png" /><div class="title">OBEDECER AS LEIS DE DEUS</div></div>
+    <div class="slide"><img src="img17.png" /><div class="title">SIM</div></div>
+    <div class="slide"><img src="img18.png" /><div class="title">EU AMO</div></div>
+  </div>
+</div>
+<div class="nav">
+  <button onclick="move(-1)">Voltar</button>
+  <button onclick="move(1)">Avançar</button>
+</div>
+<script>
+let index = 0;
+function move(dir) {
+  const slides = document.getElementById('slides');
+  const total = slides.children.length;
+  index = (index + dir + total) % total;
+  slides.style.transform = `translateX(${-index * 100}%)`;
+}
+</script>
+</body>
+</html>
