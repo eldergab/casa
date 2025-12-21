@@ -19,7 +19,7 @@ body {
     padding: 25px;
     border-radius: 10px;
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 h2 {
@@ -31,19 +31,25 @@ input, button {
     margin-top: 10px;
 }
 button {
-    background: #25d366;
-    color: white;
     border: none;
-    font-size: 16px;
+    font-size: 15px;
     cursor: pointer;
 }
-button:hover {
-    background: #1ebc59;
-}
+.btn-whats { background: #25d366; color: white; }
+.btn-info { background: #007bff; color: white; }
+.btn-view { background: #6c757d; color: white; }
+.btn-admin { background: #dc3545; color: white; }
+
 .result {
     margin-top: 15px;
     text-align: center;
     font-weight: bold;
+}
+small {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: #777;
 }
 </style>
 </head>
@@ -55,9 +61,14 @@ button:hover {
 
     <input type="text" id="nome" placeholder="Digite seu nome">
     <input type="text" id="whatsapp" placeholder="WhatsApp (ex: 5562999999999)">
-    <button onclick="revelar()">Revelar Amigo Secreto</button>
+
+    <button class="btn-whats" onclick="revelar()">🎁 Revelar Amigo Secreto</button>
+    <button class="btn-view" onclick="verMeuAmigo()">🔍 Ver meu amigo secreto</button>
+    <button class="btn-info" onclick="mostrarRegras()">📜 Regras</button>
+    <button class="btn-admin" onclick="resetar()">🔒 Resetar (Emerson)</button>
 
     <div class="result" id="resultado"></div>
+    <small>Sorteio individual e confidencial</small>
 </div>
 
 <script>
@@ -67,6 +78,7 @@ const participantes = [
     "Thomas",
     "Melanie",
     "Joyce",
+    "Emerson",
     "Emily",
     "Joseph",
     "Edna",
@@ -75,7 +87,8 @@ const participantes = [
     "Kainã"
 ];
 
-// carregar sorteios existentes
+const SENHA_ADMIN = "emerson123"; // 🔒 troque se quiser
+
 let sorteios = JSON.parse(localStorage.getItem("sorteios")) || {};
 
 function revelar() {
@@ -94,7 +107,7 @@ function revelar() {
     }
 
     if (sorteios[nome]) {
-        resultado.innerHTML = "⚠️ Você já revelou seu amigo secreto.";
+        resultado.innerHTML = "⚠️ Você já sorteou. Use 'Ver meu amigo secreto'.";
         return;
     }
 
@@ -109,20 +122,56 @@ function revelar() {
 
     const amigo = disponiveis[Math.floor(Math.random() * disponiveis.length)];
     sorteios[nome] = amigo;
-
     localStorage.setItem("sorteios", JSON.stringify(sorteios));
 
-    resultado.innerHTML = `🎉 Seu amigo secreto é: <br><strong>${amigo}</strong>`;
+    resultado.innerHTML = `🎉 Seu amigo secreto é:<br><strong>${amigo}</strong>`;
 
     const mensagem = encodeURIComponent(
-        `🎁 Amigo Secreto 🎁\n\nOlá ${nome}!\nSeu amigo secreto é: *${amigo}*\n\nGuarde essa mensagem 😉`
+        `🎁 Amigo Secreto 🎁\n\nOlá ${nome}!\nSeu amigo secreto é: *${amigo}*\n\nGuarde esta mensagem 😉`
     );
 
-    const linkWhatsApp = `https://wa.me/${whatsapp}?text=${mensagem}`;
+    window.open(`https://wa.me/${whatsapp}?text=${mensagem}`, "_blank");
+}
 
-    setTimeout(() => {
-        window.open(linkWhatsApp, "_blank");
-    }, 1500);
+function verMeuAmigo() {
+    const nome = document.getElementById("nome").value.trim();
+    const resultado = document.getElementById("resultado");
+
+    if (!nome) {
+        resultado.innerHTML = "⚠️ Digite seu nome.";
+        return;
+    }
+
+    if (!sorteios[nome]) {
+        resultado.innerHTML = "❌ Nenhum sorteio encontrado para este nome.";
+        return;
+    }
+
+    resultado.innerHTML = `🎁 Seu amigo secreto é:<br><strong>${sorteios[nome]}</strong>`;
+}
+
+function mostrarRegras() {
+    alert(
+`📜 REGRAS DO AMIGO SECRETO
+
+✔ Só participa quem está na lista
+✔ Cada pessoa sorteia apenas uma vez
+✔ O nome é enviado pelo WhatsApp
+✔ Ninguém vê o sorteio dos outros
+✔ Apenas o Emerson pode resetar o sistema`
+    );
+}
+
+function resetar() {
+    const senha = prompt("Digite a senha do administrador:");
+
+    if (senha === SENHA_ADMIN) {
+        localStorage.removeItem("sorteios");
+        sorteios = {};
+        document.getElementById("resultado").innerHTML = "✅ Sorteio resetado com sucesso.";
+    } else {
+        alert("❌ Senha incorreta.");
+    }
 }
 </script>
 
