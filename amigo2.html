@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Amigo Secreto Online</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+h2 {
+    text-align: center;
+}
+input, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+}
+button {
+    background: #25d366;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+button:hover {
+    background: #1ebc59;
+}
+.result {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Amigo Secreto 🎁</h2>
+
+    <input type="text" id="nome" placeholder="Digite seu nome">
+    <input type="text" id="whatsapp" placeholder="WhatsApp (ex: 5562999999999)">
+    <button onclick="revelar()">Revelar Amigo Secreto</button>
+
+    <div class="result" id="resultado"></div>
+</div>
+
+<script>
+const participantes = [
+    "Elder Ribeiro",
+    "Elder Taylor",
+    "Thomas",
+    "Melanie",
+    "Joyce",
+    "Emily",
+    "Joseph",
+    "Edna",
+    "Augusto",
+    "Josie",
+    "Kaua"
+];
+
+// carregar sorteios existentes
+let sorteios = JSON.parse(localStorage.getItem("sorteios")) || {};
+
+function revelar() {
+    const nome = document.getElementById("nome").value.trim();
+    const whatsapp = document.getElementById("whatsapp").value.trim();
+    const resultado = document.getElementById("resultado");
+
+    if (!nome || !whatsapp) {
+        resultado.innerHTML = "⚠️ Preencha todos os campos.";
+        return;
+    }
+
+    if (!participantes.includes(nome)) {
+        resultado.innerHTML = "❌ Nome não está na lista.";
+        return;
+    }
+
+    if (sorteios[nome]) {
+        resultado.innerHTML = "⚠️ Você já revelou seu amigo secreto.";
+        return;
+    }
+
+    let disponiveis = participantes.filter(p =>
+        p !== nome && !Object.values(sorteios).includes(p)
+    );
+
+    if (disponiveis.length === 0) {
+        resultado.innerHTML = "❌ Não há mais nomes disponíveis.";
+        return;
+    }
+
+    const amigo = disponiveis[Math.floor(Math.random() * disponiveis.length)];
+    sorteios[nome] = amigo;
+
+    localStorage.setItem("sorteios", JSON.stringify(sorteios));
+
+    resultado.innerHTML = `🎉 Seu amigo secreto é: <br><strong>${amigo}</strong>`;
+
+    const mensagem = encodeURIComponent(
+        `🎁 Amigo Secreto 🎁\n\nOlá ${nome}!\nSeu amigo secreto é: *${amigo}*\n\nGuarde essa mensagem 😉`
+    );
+
+    const linkWhatsApp = `https://wa.me/${whatsapp}?text=${mensagem}`;
+
+    setTimeout(() => {
+        window.open(linkWhatsApp, "_blank");
+    }, 1500);
+}
+</script>
+
+</body>
+</html>
