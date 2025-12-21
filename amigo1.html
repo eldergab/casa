@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteio Amigo Secreto</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background-color: #f4f4f9; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        input, button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
+        button { background-color: #25d366; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #128c7e; }
+        h2 { color: #075e54; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>🎁 Amigo Secreto</h2>
+    <p>Digite seu nome completo conforme a lista:</p>
+    <input type="text" id="userName" placeholder="Seu nome (ex: Elder Ribeiro)">
+    <input type="text" id="userPhone" placeholder="Seu WhatsApp (ex: 5511999999999)">
+    <button onclick="realizarSorteio()">Descobrir meu Amigo Secreto</button>
+    <p id="status" style="font-size: 0.9em; color: #666;"></p>
+</div>
+
+<script>
+    // Lista oficial de participantes
+    const participantes = [
+        "Elder Ribeiro", "Elder Taylor", "Thomas", "Melanie", 
+        "Joyce", "Emily", "Joseph", "Edna", 
+        "Augusto", "Josie", "Kaua"
+    ];
+
+    // Função para embaralhar (Algoritmo Fisher-Yates)
+    function embaralhar(array) {
+        let m = array.length, t, i;
+        while (m) {
+            i = Math.floor(Math.random() * m--);
+            t = array[m];
+            array[m] = array[i];
+            array[i] = t;
+        }
+        return array;
+    }
+
+    // Gerar o sorteio fixo para que todos recebam o par correto
+    // Nota: Em um site real, isso ficaria no servidor para ninguém "roubar"
+    function gerarSorteioFixo() {
+        let sorteados = [...participantes];
+        let resultado = {};
+        
+        // Garante que ninguém tire a si mesmo
+        let valido = false;
+        while (!valido) {
+            embaralhar(sorteados);
+            valido = participantes.every((nome, index) => nome !== sorteados[index]);
+        }
+
+        participantes.forEach((nome, index) => {
+            resultado[nome] = sorteados[index];
+        });
+        return resultado;
+    }
+
+    // O sorteio é gerado uma vez ao carregar a página para esta sessão
+    const mapaSorteio = gerarSorteioFixo();
+
+    function realizarSorteio() {
+        const nomeInformado = document.getElementById('userName').value.trim();
+        const telefone = document.getElementById('userPhone').value.trim();
+        const status = document.getElementById('status');
+
+        if (!participantes.includes(nomeInformado)) {
+            alert("Nome não encontrado na lista oficial! Verifique a grafia.");
+            return;
+        }
+
+        if (telefone === "") {
+            alert("Por favor, insira seu número de WhatsApp.");
+            return;
+        }
+
+        const amigoSecreto = mapaSorteio[nomeInformado];
+        const mensagem = `Olá ${nomeInformado}! 🎄 Seu amigo secreto é: *${amigoSecreto}*! Não conte para ninguém!`;
+        
+        // Codifica a mensagem para o link do WhatsApp
+        const linkWhatsapp = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
+
+        status.innerText = "Redirecionando para o WhatsApp...";
+        
+        // Abre o WhatsApp
+        window.location.href = linkWhatsapp;
+    }
+</script>
+
+</body>
+</html>
