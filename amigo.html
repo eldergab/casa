@@ -22,9 +22,7 @@ body {
     max-width: 420px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-h2 {
-    text-align: center;
-}
+h2 { text-align: center; }
 input, button {
     width: 100%;
     padding: 10px;
@@ -36,8 +34,8 @@ button {
     cursor: pointer;
 }
 .btn-whats { background: #25d366; color: white; }
-.btn-info { background: #007bff; color: white; }
 .btn-view { background: #6c757d; color: white; }
+.btn-info { background: #007bff; color: white; }
 .btn-admin { background: #dc3545; color: white; }
 
 .result {
@@ -60,49 +58,52 @@ small {
     <h2>Amigo Secreto 🎁</h2>
 
     <input type="text" id="nome" placeholder="Digite seu nome">
-    <input type="text" id="whatsapp" placeholder="WhatsApp (ex: 5562999999999)">
 
     <button class="btn-whats" onclick="revelar()">🎁 Revelar Amigo Secreto</button>
     <button class="btn-view" onclick="verMeuAmigo()">🔍 Ver meu amigo secreto</button>
     <button class="btn-info" onclick="mostrarRegras()">📜 Regras</button>
-    <button class="btn-admin" onclick="resetar()">🔒 Resetar </button>
+    <button class="btn-admin" onclick="resetar()">🔒 Resetar</button>
 
     <div class="result" id="resultado"></div>
     <small>Sorteio individual e confidencial</small>
 </div>
 
 <script>
-const participantes = [
-    "Elder Ribeiro",
-    "Elder Taylor",
-    "Thomas",
-    "Melanie",
-    "Joyce",
-    "Emerson",
-    "Emily",
-    "Joseph",
-    "Edna",
-    "Augusto",
-    "Josie",
-    "Cox",
-    "Kainã"
-];
+const participantes = {
+    "Elder Ribeiro": "5562994641333",
+    "Elder Taylor": "5562994641333",
+    "Thomas": "5562920026981",
+    "Melanie": "5562920026981",
+    "Joyce": "5562920026981",
+    "Emerson": "5562920026981",
+    "Emily": "5562995436635",
+    "Joseph": "5562992257198",
+    "Edna": "5562999389827",
+    "Augusto": "5562998235175",
+    "Josie": "5562992823236",
+    "Cox": "5595991171949",
+    "Kainã": "5562991479973"
+};
 
-const SENHA_ADMIN = "emerson123"; // 🔒 troque se quiser
+const bloqueios = {
+    "Elder Ribeiro": ["Elder Taylor"],
+    "Elder Taylor": ["Elder Ribeiro"]
+};
+
+const SENHA_ADMIN = "emerson123";
 
 let sorteios = JSON.parse(localStorage.getItem("sorteios")) || {};
 
 function revelar() {
     const nome = document.getElementById("nome").value.trim();
-    const whatsapp = document.getElementById("whatsapp").value.trim();
     const resultado = document.getElementById("resultado");
 
-    if (!nome || !whatsapp) {
-        resultado.innerHTML = "⚠️ Preencha todos os campos.";
+    if (!nome) {
+        resultado.innerHTML = "⚠️ Digite seu nome.";
         return;
     }
 
-    if (!participantes.includes(nome)) {
+    if (!participantes[nome]) {
         resultado.innerHTML = "❌ Nome não está na lista.";
         return;
     }
@@ -112,12 +113,14 @@ function revelar() {
         return;
     }
 
-    let disponiveis = participantes.filter(p =>
-        p !== nome && !Object.values(sorteios).includes(p)
+    let disponiveis = Object.keys(participantes).filter(p =>
+        p !== nome &&
+        !Object.values(sorteios).includes(p) &&
+        !(bloqueios[nome] && bloqueios[nome].includes(p))
     );
 
     if (disponiveis.length === 0) {
-        resultado.innerHTML = "❌ Não há mais nomes disponíveis.";
+        resultado.innerHTML = "❌ Não há nomes disponíveis para você.";
         return;
     }
 
@@ -131,7 +134,7 @@ function revelar() {
         `🎁 Amigo Secreto 🎁\n\nOlá ${nome}!\nSeu amigo secreto é: *${amigo}*\n\nGuarde esta mensagem 😉`
     );
 
-    window.open(`https://wa.me/${whatsapp}?text=${mensagem}`, "_blank");
+    window.open(`https://wa.me/${participantes[nome]}?text=${mensagem}`, "_blank");
 }
 
 function verMeuAmigo() {
@@ -144,7 +147,7 @@ function verMeuAmigo() {
     }
 
     if (!sorteios[nome]) {
-        resultado.innerHTML = "❌ Nenhum sorteio encontrado para este nome.";
+        resultado.innerHTML = "❌ Nenhum sorteio encontrado.";
         return;
     }
 
@@ -159,7 +162,8 @@ function mostrarRegras() {
 ✔ Cada pessoa sorteia apenas uma vez
 ✔ O nome é enviado pelo WhatsApp
 ✔ Ninguém vê o sorteio dos outros
-✔ Apenas o Admin pode resetar o sistema`
+✔ Elder Ribeiro e Elder Taylor não se tiram
+✔ Apenas o Admin pode resetar`
     );
 }
 
@@ -169,7 +173,8 @@ function resetar() {
     if (senha === SENHA_ADMIN) {
         localStorage.removeItem("sorteios");
         sorteios = {};
-        document.getElementById("resultado").innerHTML = "✅ Sorteio resetado com sucesso.";
+        document.getElementById("resultado").innerHTML =
+            "✅ Sorteio resetado com sucesso.";
     } else {
         alert("❌ Senha incorreta.");
     }
