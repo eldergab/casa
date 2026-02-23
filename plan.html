@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Planner Diário</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+    }
+    .slot {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+    .slot label {
+        width: 80px;
+        font-weight: bold;
+    }
+    .slot input {
+        flex: 1;
+        padding: 6px;
+    }
+    button {
+        margin-top: 20px;
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        background: #25D366;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 6px;
+    }
+    button:hover {
+        opacity: 0.9;
+    }
+</style>
+</head>
+<body>
+
+<h1>📅 Planejamento Diário</h1>
+
+<form id="planner"></form>
+
+<button type="button" onclick="enviarWhatsApp()">
+📤 Enviar Planejamento no WhatsApp
+</button>
+
+<script>
+const inicioHora = 5;
+const inicioMin = 30;
+const fimHora = 22;
+const fimMin = 30;
+
+const form = document.getElementById("planner");
+
+function pad(n) {
+    return n.toString().padStart(2, "0");
+}
+
+let hora = inicioHora;
+let min = inicioMin;
+
+while (hora < fimHora || (hora === fimHora && min <= fimMin)) {
+    const horario = `${pad(hora)}:${pad(min)}`;
+
+    const div = document.createElement("div");
+    div.className = "slot";
+
+    const label = document.createElement("label");
+    label.textContent = horario;
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.name = horario;
+    input.placeholder = "Compromisso";
+
+    div.appendChild(label);
+    div.appendChild(input);
+    form.appendChild(div);
+
+    min += 30;
+    if (min >= 60) {
+        min = 0;
+        hora++;
+    }
+}
+
+function enviarWhatsApp() {
+    let mensagem = "📅 *PLANEJAMENTO DIÁRIO*\n\n";
+
+    const inputs = document.querySelectorAll("#planner input");
+
+    inputs.forEach(input => {
+        if (input.value.trim() !== "") {
+            mensagem += `⏰ ${input.name} - ${input.value}\n`;
+        }
+    });
+
+    if (mensagem.trim() === "📅 *PLANEJAMENTO DIÁRIO*") {
+        alert("Preencha pelo menos um compromisso.");
+        return;
+    }
+
+    const numero = "62920026981";
+    const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+
+    window.open(url, "_blank");
+}
+</script>
+
+</body>
+</html>
