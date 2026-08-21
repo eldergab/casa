@@ -63,7 +63,7 @@
     function enviarMensagem() {
         let num = document.getElementById('phone').value;
         
-        // Remove caracteres não numéricos
+        // Remove tudo que não for número
         num = num.replace(/\D/g, '');
         
         if (num.length >= 10) {
@@ -71,10 +71,10 @@
                 num = '55' + num;
             }
             
-            // Usa o protocolo universal wa.me
-            const url = `https://wa.me/${num}`;
+            // API Oficial: Funciona direto sem travar na tela cinza
+            const url = `https://api.whatsapp.com/send?phone=${num}`;
             
-            // Redireciona na mesma aba para evitar bloqueio de pop-up no Android
+            // Abre diretamente na aba atual para evitar bloqueios
             window.location.href = url;
         } else {
             alert("Por favor, digite o número completo com DDD.");
