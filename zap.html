@@ -71,17 +71,17 @@
                 num = '55' + num;
             }
             
-            // API Oficial: Funciona direto sem travar na tela cinza
-            const url = `https://api.whatsapp.com/send?phone=${num}`;
+            // Link direto para a interface do WhatsApp Web no navegador
+            const url = `https://web.whatsapp.com/send?phone=${num}&text=`;
             
-            // Abre diretamente na aba atual para evitar bloqueios
+            // Redireciona na própria aba para não ser bloqueado como pop-up
             window.location.href = url;
         } else {
             alert("Por favor, digite o número completo com DDD.");
         }
     }
 
-    // Permite disparar com a tecla Enter
+    // Permite acionar o botão apertando a tecla Enter
     document.getElementById('phone').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             enviarMensagem();
