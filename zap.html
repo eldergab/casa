@@ -53,35 +53,40 @@
 
 <div class="container">
     <h2>WhatsApp Direto</h2>
-    <p>Digite o número com DDD (ex: 11999999999)</p>
+    <p>Digite o número com DDD (ex: 62999999999)</p>
     
-    <input type="text" id="phone" placeholder="DDD + Número" required>
+    <input type="tel" id="phone" placeholder="DDD + Número" required autofocus>
     <button onclick="enviarMensagem()">Abrir no WhatsApp</button>
-    
-    <p>O link abrirá em uma nova aba.</p>
 </div>
 
 <script>
     function enviarMensagem() {
-        // Pega o valor do input
         let num = document.getElementById('phone').value;
         
-        // Remove tudo que não for número (espaços, traços, parênteses)
+        // Remove caracteres não numéricos
         num = num.replace(/\D/g, '');
         
         if (num.length >= 10) {
-            // Se o usuário não digitou o código do país (55), o script adiciona automaticamente
             if (num.length === 10 || num.length === 11) {
                 num = '55' + num;
             }
             
-            // Monta a URL e abre em nova aba
-            const url = `https://web.whatsapp.com/send?phone=${num}`;
-            window.open(url, '_blank');
+            // Usa o protocolo universal wa.me
+            const url = `https://wa.me/${num}`;
+            
+            // Redireciona na mesma aba para evitar bloqueio de pop-up no Android
+            window.location.href = url;
         } else {
             alert("Por favor, digite o número completo com DDD.");
         }
     }
+
+    // Permite disparar com a tecla Enter
+    document.getElementById('phone').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            enviarMensagem();
+        }
+    });
 </script>
 
 </body>
