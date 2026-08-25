@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Análise e Registro: Vencer a Ira</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --card-bg: #ffffff;
+      --primary: #2c3e50;
+      --accent: #e74c3c;
+      --border: #cccccc;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+    p.subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 25px;
+      font-size: 0.95rem;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: var(--primary);
+    }
+    input[type="text"], textarea, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 1rem;
+    }
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    input[type="range"] {
+      flex: 1;
+    }
+    .val-display {
+      font-weight: bold;
+      font-size: 1.1rem;
+      min-width: 30px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #1a252f;
+    }
+    #result-card {
+      display: none;
+      margin-top: 30px;
+      padding: 20px;
+      border-left: 5px solid var(--accent);
+      background: #fdf2f2;
+      border-radius: 5px;
+    }
+    #result-card h2 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+    .summary-item {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Vencer a Ira</h1>
+  <p class="subtitle">Análise Auto-Reflexiva do Registro de Acessos de Ira</p>
+
+  <form id="iraForm">
+    <!-- Estopim -->
+    <div class="form-group">
+      <label for="estopim">Data do acontecimento ou pessoa que constituiu o estopim:</label>
+      <input type="text" id="estopim" placeholder="Ex: Discussão com o marido / Filhos comportaram-se mal" required>
+    </div>
+
+    <!-- Intensidade -->
+    <div class="form-group">
+      <label>Intensidade de minha ira (1 = Branda, 10 = Grave):</label>
+      <div class="slider-container">
+        <span>1</span>
+        <input type="range" id="intensidade" min="1" max="10" value="5" oninput="document.getElementById('vInt').innerText = this.value">
+        <span>10</span>
+        <span class="val-display" id="vInt">5</span>
+      </div>
+    </div>
+
+    <!-- Pensamentos -->
+    <div class="form-group">
+      <label for="pensamentos">Pensamentos que alimentaram minha ira:</label>
+      <textarea id="pensamentos" rows="2" placeholder="Ex: Ele não se importa comigo / As crianças nunca me escutam" required></textarea>
+    </div>
+
+    <!-- Sentimentos por trás -->
+    <div class="form-group">
+      <label for="sentimentos">Sentimentos por trás de minha ira:</label>
+      <textarea id="sentimentos" rows="2" placeholder="Ex: Não me sinto amado(a), me sinto ignorado(a) ou usado(a)" required></textarea>
+    </div>
+
+    <!-- Como lidei -->
+    <div class="form-group">
+      <label for="comoLidei">Como lidei com minha ira:</label>
+      <textarea id="comoLidei" rows="2" placeholder="Ex: Gritei / Disse-lhes calmamente que ficassem no quarto" required></textarea>
+    </div>
+
+    <!-- Frases internas -->
+    <div class="form-group">
+      <label for="frases">Frases que disse para mim mesmo(a) para lidar com a ira:</label>
+      <textarea id="frases" rows="2" placeholder="Ex: Ele merece ser punido / Eles estavam apenas agindo como crianças" required></textarea>
+    </div>
+
+    <!-- Sucesso ao controlar -->
+    <div class="form-group">
+      <label>Sucesso ao controlar minha ira (1 = Nenhum, 10 = Grande):</label>
+      <div class="slider-container">
+        <span>1</span>
+        <input type="range" id="sucesso" min="1" max="10" value="5" oninput="document.getElementById('vSuc').innerText = this.value">
+        <span>10</span>
+        <span class="val-display" id="vSuc">5</span>
+      </div>
+    </div>
+
+    <!-- O que ajudou -->
+    <div class="form-group">
+      <label for="ajudou">O que parece ter ajudado (ou piorado):</label>
+      <textarea id="ajudou" rows="2" placeholder="Ex: Meus atos só pioraram / Fiz uma pausa e fui caminhar" required></textarea>
+    </div>
+
+    <!-- Estado da ira -->
+    <div class="form-group">
+      <label for="estado">Ira foi:</label>
+      <select id="estado" required>
+        <option value="suprimida">Suprimida</option>
+        <option value="extravasada">Extravasada</option>
+        <option value="resolvida">Resolvida</option>
+      </select>
+    </div>
+
+    <!-- O que fará na próxima vez -->
+    <div class="form-group">
+      <label for="proximaVez">O que farei melhor na próxima vez:</label>
+      <textarea id="proximaVez" rows="2" placeholder="Ex: Não reagir, acalmar-me antes de falar / Nada, fiz bem esta vez" required></textarea>
+    </div>
+
+    <button type="button" onclick="analisarRegistro()">Gerar Análise</button>
+  </form>
+
+  <div id="result-card">
+    <h2>Relatório de Análise Personalizada</h2>
+    <div id="analysis-content"></div>
+  </div>
+</div>
+
+<script>
+function analisarRegistro() {
+  const estopim = document.getElementById('estopim').value;
+  const intensidade = parseInt(document.getElementById('intensidade').value);
+  const pensamentos = document.getElementById('pensamentos').value;
+  const sentimentos = document.getElementById('sentimentos').value;
+  const comoLidei = document.getElementById('comoLidei').value;
+  const frases = document.getElementById('frases').value;
+  const sucesso = parseInt(document.getElementById('sucesso').value);
+  const ajudou = document.getElementById('ajudou').value;
+  const estado = document.getElementById('estado').value;
+  const proximaVez = document.getElementById('proximaVez').value;
+
+  if(!estopim || !pensamentos || !sentimentos) {
+    alert("Por favor, preencha todos os campos do formulário para gerar a análise.");
+    return;
+  }
+
+  // Lógica de diagnósticos automáticos
+  let diagnosticoIntensidade = intensidade >= 7 
+    ? "Sua ira atingiu um nível elevado. Em momentos assim, o corpo entra em estado de alerta crítico (luta ou fuga), dificultando o raciocínio lógico." 
+    : "Sua ira permaneceu em um nível brando a moderado, o que facilita o trabalho de pausa e autocontrole.";
+
+  let diagnosticoSucesso = sucesso >= 7 
+    ? "Você conseguiu exercer um ótimo controle sobre suas reações, o que demonstra maturidade emocional e esforço consciente." 
+    : "O controle foi baixo ou nulo. Isso indica que a reação foi automática ou impulsiva, dominada pelo calor do momento.";
+
+  let conselhoEstado = "";
+  if(estado === "suprimida") {
+    conselhoEstado = "Cuidado com a <strong>ira suprimida</strong>. Guardar o ressentimento pode levar a explosões futuras ou sintomas de ansiedade. Tente expressar o que sente de forma assertiva.";
+  } else if(estado === "extravasada") {
+    conselhoEstado = "A <strong>ira extravasada</strong> em forma de gritos ou ataques tende a danificar os relacionamentos. Foque no hábito da pausa estratégica antes de reagir.";
+  } else {
+    conselhoEstado = "Parabéns por buscar uma ira <strong>resolvida</strong>. Chegar ao entendimento e à solução do problema é o melhor caminho para a saúde emocional.";
+  }
+
+  const html = `
+    <div class="summary-item"><strong>Estopim registrado:</strong> ${estopim}</div>
+    <div class="summary-item"><strong>Diagnóstico da Intensidade (${intensidade}/10):</strong> ${diagnosticoIntensidade}</div>
+    <div class="summary-item"><strong>Avaliação do Controle (${sucesso}/10):</strong> ${diagnosticoSucesso}</div>
+    <hr>
+    <p><strong>Análise dos Pensamentos e Sentimentos:</strong> Você identificou pensamentos de fundo como <em>"${pensamentos}"</em> e sentimentos de <em>"${sentimentos}"</em>. Reconhecer a dor por trás da raiva é o passo fundamental para desarmá-la.</p>
+    <p><strong>Avaliação da Resolução:</strong> ${conselhoEstado}</p>
+    <p><strong>Plano de Ação para a próxima vez:</strong> "${proximaVez}". Mantenha este compromisso consciente em mente quando enfrentar um novo gatilho.</p>
+  `;
+
+  const resultCard = document.getElementById('result-card');
+  document.getElementById('analysis-content').innerHTML = html;
+  resultCard.style.display = 'block';
+  resultCard.scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
