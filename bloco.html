@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bloco de Notas — Relatório / Enviar via WhatsApp</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; margin: 0; padding: 20px; background:#f6f7fb; color:#111; }
+    .container { max-width:940px; margin:0 auto; background:#fff; padding:18px; border-radius:8px; box-shadow:0 6px 18px rgba(20,20,40,0.08); }
+    h1 { margin: 0 0 12px 0; font-size:20px; }
+    textarea { width:100%; height:320px; padding:12px; font-size:14px; border:1px solid #d9dbea; border-radius:6px; resize:vertical; box-sizing:border-box; }
+    .row { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; align-items:center; }
+    input[type="text"], input[type="number"] { padding:8px; border:1px solid #d9dbea; border-radius:6px; }
+    button { padding:8px 12px; border:0; border-radius:6px; background:#0b76ef; color:#fff; cursor:pointer; }
+    button.secondary { background:#6b7280; }
+    button.warn { background:#ef4444; }
+    small { color:#5b6370; display:block; margin-top:8px; }
+    .status { margin-left:auto; color:#086; font-weight:600; }
+    .history { margin-top:12px; background:#f3f6ff; padding:10px; border-radius:6px; color:#0b3b66; font-size:13px; }
+    .meta { font-size:13px; color:#556; }
+    label.inline { display:flex; gap:8px; align-items:center; }
+    .controls { display:flex; gap:8px; flex-wrap:wrap; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Bloco de Notas — Relatório (Enviar via WhatsApp)</h1>
+
+    <div class="row">
+      <div style="flex:1; min-width:220px;">
+        <label class="meta">Código do país (automático se habilitado):</label>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <input id="countryCode" type="text" value="55" style="width:88px;" />
+          <label class="inline"><input id="autoCountry" type="checkbox" checked /> Adicionar código do país automaticamente</label>
+        </div>
+      </div>
+
+      <div style="flex:1; min-width:260px;">
+        <label class="meta">Número do WhatsApp (somente dígitos):</label>
+        <input id="waNumber" type="text" value="62920026981" placeholder="Ex.: 61999999999" />
+      </div>
+
+      <div style="min-width:200px;">
+        <label class="meta">Ações:</label>
+        <div class="controls">
+          <button id="sendBtn">Enviar via WhatsApp</button>
+          <button id="markSentBtn" class="secondary">Marcar como enviado</button>
+        </div>
+      </div>
+
+      <span class="status" id="sentStatus">Não enviado</span>
+    </div>
+
+    <hr style="margin-top:12px;margin-bottom:12px; border:0; border-top:1px solid #eef2ff" />
+
+    <div class="row" style="align-items:flex-start;">
+      <div style="flex:1; min-width:460px;">
+        <label class="meta">Seu relatório / notas:</label>
+        <textarea id="note" placeholder="Escreva aqui o relatório..."></textarea>
+
+        <div class="row" style="margin-top:10px;">
+          <button id="insertTemplate" class="secondary">Inserir modelo de relatório</button>
+          <button id="saveLocal" class="secondary">Salvar (local)</button>
+          <button id="downloadTxt">Baixar .txt</button>
+          <button id="copyBtn" class="secondary">Copiar</button>
+          <button id="clearBtn" class="warn">Limpar</button>
+          <small id="autosaveMsg">Autosave: ativo</small>
+        </div>
+      </div>
+
+      <div style="width:360px;">
+        <label class="meta">Modelo rápido (preencha e insira no texto):</label>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <input id="mTitulo" type="text" placeholder="Título / Ocorrência" />
+          <input id="mLocal" type="text" placeholder="Local" />
+          <input id="mResponsavel" type="text" placeholder="Responsável" />
+          <textarea id="mAcoes" rows="6" placeholder="Ações tomadas / Observações"></textarea>
+          <div style="display:flex; gap:8px;">
+            <button id="generateFromModel">Gerar relatório a partir do modelo</button>
+            <button id="clearModel" class="secondary">Limpar modelo</button>
+          </div>
+        </div>
+
+        <div id="history" class="history" style="display:none;">
+          <strong>Histórico de envios:</strong>
+          <ul id="historyList" style="margin:8px 0 0 18px; padding:0;"></ul>
+        </div>
+      </div>
+    </div>
+
+    <small style="display:block; margin-top:12px;">
+      Observação: o botão "Enviar via WhatsApp" abre o WhatsApp Web/app com a mensagem preenchida. O link usado é wa.me e exige somente dígitos no número (ex.: 55 + DDD + número).
+    </small>
+  </div>
+
+  <script>
+    // Elementos
+    const noteEl = document.getElementById('note');
+    const saveLocalBtn = document.getElementById('saveLocal');
+    const downloadBtn = document.getElementById('downloadTxt');
+    const copyBtn = document.getElementById('copyBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const waNumberEl = document.getElementById('waNumber');
+    const sendBtn = document.getElementById('sendBtn');
+    const markSentBtn = document.getElementById('markSentBtn');
+    const sentStatus = document.getElementById('sentStatus');
+    const autosaveMsg = document.getElementById('autosaveMsg');
+    const historyEl = document.getElementById('history');
+    const historyList = document.getElementById('historyList');
+
+    const countryCodeEl = document.getElementById('countryCode');
+    const autoCountryEl = document.getElementById('autoCountry');
+
+    const insertTemplateBtn = document.getElementById('insertTemplate');
+    const mTitulo = document.getElementById('mTitulo');
+    const mLocal = document.getElementById('mLocal');
+    const mResponsavel = document.getElementById('mResponsavel');
+    const mAcoes = document.getElementById('mAcoes');
+    const generateFromModelBtn = document.getElementById('generateFromModel');
+    const clearModelBtn = document.getElementById('clearModel');
+
+    // Keys for localStorage
+    const KEY_CONTENT = 'notepad_content_v2';
+    const KEY_HISTORY = 'notepad_sent_history_v2';
+    const KEY_SENT_FLAG = 'notepad_sent_flag_v2';
+    const KEY_NUMBER = 'notepad_wa_number_v2';
+    const KEY_COUNTRY = 'notepad_country_v2';
+    const KEY_AUTO_COUNTRY = 'notepad_auto_country_v2';
+
+    // Load saved data
+    function load() {
+      const saved = localStorage.getItem(KEY_CONTENT);
+      if (saved) noteEl.value = saved;
+      const num = localStorage.getItem(KEY_NUMBER);
+      if (num) waNumberEl.value = num;
+      const country = localStorage.getItem(KEY_COUNTRY);
+      if (country) countryCodeEl.value = country;
+      const auto = localStorage.getItem(KEY_AUTO_COUNTRY);
+      if (auto !== null) autoCountryEl.checked = auto === '1';
+      const history = JSON.parse(localStorage.getItem(KEY_HISTORY) || '[]');
+      renderHistory(history);
+      const sentFlag = localStorage.getItem(KEY_SENT_FLAG);
+      updateSentStatus(!!sentFlag);
+    }
+
+    function updateSentStatus(sent) {
+      sentStatus.textContent = sent ? 'Enviado' : 'Não enviado';
+      sentStatus.style.color = sent ? '#087f5b' : '#6b7280';
+    }
+
+    function renderHistory(history) {
+      if (!history.length) {
+        historyEl.style.display = 'none';
+        historyList.innerHTML = '';
+        return;
+      }
+      historyEl.style.display = 'block';
+      historyList.innerHTML = history.map(item => {
+        const t = new Date(item.time).toLocaleString();
+        const preview = item.preview ? ' — ' + item.preview : '';
+        return `<li style="margin-bottom:6px;">Para <strong>${item.number}</strong> — ${t}${preview}</li>`;
+      }).join('');
+    }
+
+    // Autosave (debounced)
+    let autosaveTimer;
+    noteEl.addEventListener('input', () => {
+      clearTimeout(autosaveTimer);
+      autosaveTimer = setTimeout(() => {
+        localStorage.setItem(KEY_CONTENT, noteEl.value);
+        autosaveMsg.textContent = 'Autosave: salvo às ' + new Date().toLocaleTimeString();
+      }, 700);
+    });
+
+    // Save/Sync number and country settings when changed
+    waNumberEl.addEventListener('change', () => localStorage.setItem(KEY_NUMBER, waNumberEl.value));
+    countryCodeEl.addEventListener('change', () => localStorage.setItem(KEY_COUNTRY, countryCodeEl.value));
+    autoCountryEl.addEventListener('change', () => localStorage.setItem(KEY_AUTO_COUNTRY, autoCountryEl.checked ? '1' : '0'));
+
+    // Manual save
+    saveLocalBtn.addEventListener('click', () => {
+      localStorage.setItem(KEY_CONTENT, noteEl.value);
+      autosaveMsg.textContent = 'Salvo localmente em ' + new Date().toLocaleTimeString();
+    });
+
+    // Download as .txt
+    downloadBtn.addEventListener('click', () => {
+      const blob = new Blob([noteEl.value], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const name = 'relatorio-' + new Date().toISOString().slice(0,19).replace(/[:T]/g,'-') + '.txt';
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // Copy to clipboard
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(noteEl.value);
+        copyBtn.textContent = 'Copiado!';
+        setTimeout(() => copyBtn.textContent = 'Copiar', 1400);
+      } catch (e) {
+        alert('Falha ao copiar: ' + e.message);
+      }
+    });
+
+    // Clear
+    clearBtn.addEventListener('click', () => {
+      if (!confirm('Limpar todo o texto?')) return;
+      noteEl.value = '';
+      localStorage.removeItem(KEY_CONTENT);
+      autosaveMsg.textContent = 'Autosave: nenhum conteúdo';
+    });
+
+    // Insert pre-defined template into textarea
+    insertTemplateBtn.addEventListener('click', () => {
+      const template = buildDefaultTemplate();
+      noteEl.value = template;
+      localStorage.setItem(KEY_CONTENT, noteEl.value);
+      autosaveMsg.textContent = 'Modelo inserido';
+      noteEl.focus();
+    });
+
+    function buildDefaultTemplate() {
+      const now = new Date();
+      return [
+        'TÍTULO / OCORRÊNCIA: ',
+        'LOCAL: ',
+        'DATA/HORA: ' + now.toLocaleString(),
+        'RESPONSÁVEL: ',
+        '',
+        'DESCRIÇÃO:',
+        '(Descreva o que ocorreu...)',
+        '',
+        'AÇÕES TOMADAS:',
+        '- ',
+        '',
+        'OBSERVAÇÕES:',
+        '- '
+      ].join('\\n');
+    }
+
+    // Generate report from model fields
+    generateFromModelBtn.addEventListener('click', () => {
+      const now = new Date();
+      const parts = [
+        'TÍTULO / OCORRÊNCIA: ' + (mTitulo.value.trim() || '(não informado)'),
+        'LOCAL: ' + (mLocal.value.trim() || '(não informado)'),
+        'DATA/HORA: ' + now.toLocaleString(),
+        'RESPONSÁVEL: ' + (mResponsavel.value.trim() || '(não informado)'),
+        '',
+        'DESCRIÇÃO:',
+        (noteEl.value.trim() ? noteEl.value.trim() : '(Descreva aqui...)'),
+        '',
+        'AÇÕES TOMADAS:',
+        (mAcoes.value.trim() ? mAcoes.value.trim() : '- (não informado)'),
+        '',
+        'OBSERVAÇÕES:',
+        '- '
+      ];
+      noteEl.value = parts.join('\\n');
+      localStorage.setItem(KEY_CONTENT, noteEl.value);
+      autosaveMsg.textContent = 'Relatório gerado a partir do modelo';
+    });
+
+    clearModelBtn.addEventListener('click', () => {
+      mTitulo.value = '';
+      mLocal.value = '';
+      mResponsavel.value = '';
+      mAcoes.value = '';
+    });
+
+    // Sanitize number: remove non-digits
+    function sanitizeDigits(s) {
+      return (s || '').replace(/\\D+/g, '');
+    }
+
+    // Build final number for wa.me
+    function prepareNumber(raw) {
+      let digits = sanitizeDigits(raw);
+      if (!digits) return '';
+      const auto = autoCountryEl.checked;
+      let country = sanitizeDigits(countryCodeEl.value) || '';
+      if (auto) {
+        // If digits already start with country, keep as is
+        if (country && digits.startsWith(country)) {
+          return digits;
+        }
+        // If digits length looks like includes country (starts with 00 or +), we've sanitized so not present
+        // Prefix country if not present
+        if (country) return country + digits;
+      }
+      return digits;
+    }
+
+    // Build message to send
+    function buildMessageForWhatsApp() {
+      const now = new Date();
+      const header = 'Relatório';
+      const body = noteEl.value || '(vazio)';
+      const when = '\\n\\nEnviado em: ' + now.toLocaleString();
+      return header + '\\n\\n' + body + when;
+    }
+
+    // Send via WhatsApp
+    sendBtn.addEventListener('click', () => {
+      const rawNumber = waNumberEl.value.trim();
+      if (!rawNumber) { alert('Informe o número do WhatsApp (somente dígitos).'); return; }
+
+      const finalNumber = prepareNumber(rawNumber);
+      if (!finalNumber) { alert('Número inválido.'); return; }
+
+      // Save the number and settings
+      localStorage.setItem(KEY_NUMBER, waNumberEl.value);
+      localStorage.setItem(KEY_COUNTRY, countryCodeEl.value);
+      localStorage.setItem(KEY_AUTO_COUNTRY, autoCountryEl.checked ? '1' : '0');
+
+      const text = buildMessageForWhatsApp();
+      const url = 'https://wa.me/' + encodeURIComponent(finalNumber) + '?text=' + encodeURIComponent(text);
+      window.open(url, '_blank');
+
+      // mark sent in history with preview
+      markSent(finalNumber, text.slice(0, 120));
+    });
+
+    function markSent(number, preview = '') {
+      const history = JSON.parse(localStorage.getItem(KEY_HISTORY) || '[]');
+      history.unshift({ number, time: new Date().toISOString(), preview });
+      if (history.length > 50) history.splice(50);
+      localStorage.setItem(KEY_HISTORY, JSON.stringify(history));
+      renderHistory(history);
+      localStorage.setItem(KEY_SENT_FLAG, '1');
+      updateSentStatus(true);
+    }
+
+    // "Marcar como enviado" button (não abre WhatsApp)
+    markSentBtn.addEventListener('click', () => {
+      const rawNumber = waNumberEl.value.trim();
+      if (!rawNumber) { alert('Informe o número do WhatsApp primeiro.'); return; }
+      const finalNumber = prepareNumber(rawNumber);
+      if (!finalNumber) { alert('Número inválido.'); return; }
+      localStorage.setItem(KEY_NUMBER, waNumberEl.value);
+      markSent(finalNumber, '(marcado manualmente)');
+      markSentBtn.textContent = 'Marcado!';
+      setTimeout(() => markSentBtn.textContent = 'Marcar como enviado', 1200);
+    });
+
+    // Load on start
+    load();
+
+    // Small UX: warn if country code non-digit
+    countryCodeEl.addEventListener('input', () => {
+      countryCodeEl.value = countryCodeEl.value.replace(/\\D+/g, '');
+    });
+  </script>
+</body>
+</html>
