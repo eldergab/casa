@@ -14,8 +14,10 @@
       --text-muted: #64748b;
       --border: #e2e8f0;
       --danger: #ef4444;
-      --success: #10b981;
+      --danger-hover: #dc2626;
       --warning: #f59e0b;
+      --warning-hover: #d97706;
+      --success: #10b981;
     }
 
     * {
@@ -63,7 +65,7 @@
       margin-bottom: 20px;
     }
 
-    /* Painel Orçamentário e Destaque */
+    /* Painel Orçamentário */
     .budget-panel {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -82,7 +84,6 @@
     .stat-card.main-stat {
       background: #eff6ff;
       border-color: #bfdbfe;
-      grid-column: span 1;
     }
 
     .stat-card .label {
@@ -166,17 +167,55 @@
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
 
+    button {
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
     button.btn-add {
       background-color: var(--primary);
       color: white;
       border: none;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.2s;
     }
 
     button.btn-add:hover {
       background-color: var(--primary-hover);
+    }
+
+    /* Ações Globais / Limpeza */
+    .action-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      font-size: 0.85rem;
+      padding: 8px 12px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .btn-action.clear-values {
+      color: var(--warning-hover);
+      border-color: var(--warning);
+    }
+
+    .btn-action.clear-values:hover {
+      background: #fffbeb;
+    }
+
+    .btn-action.reset-all {
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .btn-action.reset-all:hover {
+      background: #fef2f2;
     }
 
     /* Controles e Progresso */
@@ -193,7 +232,6 @@
       background: transparent;
       border: 1px solid var(--border);
       color: var(--text-muted);
-      cursor: pointer;
       margin-right: 4px;
     }
 
@@ -334,7 +372,6 @@
       background: transparent;
       border: none;
       color: var(--danger);
-      cursor: pointer;
       font-size: 1.1rem;
       padding: 4px 8px;
       border-radius: 4px;
@@ -408,13 +445,19 @@
       </form>
     </div>
 
+    <!-- Botões de Ação Global -->
+    <div class="action-bar">
+      <button class="btn-action clear-values" onclick="clearPurchases()">🧹 Limpar Valores & Compras</button>
+      <button class="btn-action reset-all" onclick="resetToDefault()">🔄 Resetar Lista Original</button>
+    </div>
+
     <!-- Progresso e Lista -->
     <div class="card">
       <div class="dashboard-controls">
         <div class="filters">
-          <button class="active" onclick="filterItems('all')">Todos</button>
-          <button onclick="filterItems('pending')">Pendentes</button>
-          <button onclick="filterItems('completed')">Comprados</button>
+          <button class="active" onclick="filterItems(event, 'all')">Todos</button>
+          <button onclick="filterItems(event, 'pending')">Pendentes</button>
+          <button onclick="filterItems(event, 'completed')">Comprados</button>
         </div>
         <span id="statusCount" style="font-size: 0.88rem; color: var(--text-muted);">0 / 0 itens comprados</span>
       </div>
@@ -429,9 +472,7 @@
   </div>
 
   <script>
-    // Lista inicial ajustada (Foco amplo em ALIMENTOS para 6 pessoas, sem café, limpeza essencial)
     const defaultItems = [
-      // ALIMENTOS (Mais itens e maior volume)
       { id: 1, name: "Arroz Tipo 1", qtyTarget: "15 kg", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
       { id: 2, name: "Feijão Carioca", qtyTarget: "6 kg", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
       { id: 3, name: "Óleo de Soja", qtyTarget: "6 garrafas", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
@@ -449,14 +490,12 @@
       { id: 15, name: "Proteína: Frango (Peito/Coxa)", qtyTarget: "10 kg", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
       { id: 16, name: "Ovos", qtyTarget: "3 cartelas (90 ovos)", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
 
-      // HORTIFRUTI
       { id: 17, name: "Cebola", qtyTarget: "4 kg", category: "Hortifruti", boughtQty: 0, unitPrice: 0, completed: false },
       { id: 18, name: "Alho", qtyTarget: "1 kg", category: "Hortifruti", boughtQty: 0, unitPrice: 0, completed: false },
       { id: 19, name: "Batata", qtyTarget: "6 kg", category: "Hortifruti", boughtQty: 0, unitPrice: 0, completed: false },
       { id: 20, name: "Tomate", qtyTarget: "5 kg", category: "Hortifruti", boughtQty: 0, unitPrice: 0, completed: false },
       { id: 21, name: "Banana / Frutas da Estação", qtyTarget: "8 kg", category: "Hortifruti", boughtQty: 0, unitPrice: 0, completed: false },
 
-      // LIMPEZA (Essencial)
       { id: 22, name: "Detergente Líquido", qtyTarget: "6 frascos", category: "Limpeza", boughtQty: 0, unitPrice: 0, completed: false },
       { id: 23, name: "Sabão em Pó / Líquido", qtyTarget: "5 kg", category: "Limpeza", boughtQty: 0, unitPrice: 0, completed: false },
       { id: 24, name: "Desinfetante", qtyTarget: "3 litros", category: "Limpeza", boughtQty: 0, unitPrice: 0, completed: false },
@@ -464,7 +503,6 @@
       { id: 26, name: "Papel Higiênico", qtyTarget: "1 pacote (24 rolos)", category: "Limpeza", boughtQty: 0, unitPrice: 0, completed: false }
     ];
 
-    // Carregar do localStorage
     let items = JSON.parse(localStorage.getItem('house_shopping_list_v2')) || defaultItems;
     let userBudget = parseFloat(localStorage.getItem('house_shopping_budget')) || 0;
     let currentFilter = 'all';
@@ -493,7 +531,30 @@
       calculateTotals();
     }
 
-    // Adicionar Novo Item
+    /* Novas Funções de Limpeza/Reset */
+    function clearPurchases() {
+      if (confirm("Deseja zerar os preços e marcas de 'comprado' de todos os itens da lista?")) {
+        items = items.map(item => ({
+          ...item,
+          boughtQty: 0,
+          unitPrice: 0,
+          completed: false
+        }));
+        saveState();
+        renderList();
+      }
+    }
+
+    function resetToDefault() {
+      if (confirm("Isso apagará itens personalizados e restaurará a lista inicial de compras. Continuar?")) {
+        items = JSON.parse(JSON.stringify(defaultItems));
+        userBudget = 0;
+        budgetInput.value = '';
+        saveState();
+        renderList();
+      }
+    }
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       
@@ -571,7 +632,7 @@
       renderList();
     }
 
-    function filterItems(filter) {
+    function filterItems(event, filter) {
       currentFilter = filter;
       document.querySelectorAll('.filters button').forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
