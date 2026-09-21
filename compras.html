@@ -15,6 +15,7 @@
       --border: #e2e8f0;
       --danger: #ef4444;
       --success: #10b981;
+      --warning: #f59e0b;
     }
 
     * {
@@ -34,12 +35,12 @@
 
     .container {
       width: 100%;
-      max-width: 800px;
+      max-width: 850px;
     }
 
     header {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     header h1 {
@@ -62,6 +63,77 @@
       margin-bottom: 20px;
     }
 
+    /* Painel Orçamentário e Destaque */
+    .budget-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: #f1f5f9;
+      border-radius: 10px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .stat-card.main-stat {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      grid-column: span 1;
+    }
+
+    .stat-card .label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .stat-card .value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .stat-card.main-stat .value {
+      font-size: 2.2rem;
+      color: var(--primary);
+    }
+
+    .stat-card.remaining.negative .value {
+      color: var(--danger);
+    }
+
+    .stat-card.remaining.positive .value {
+      color: var(--success);
+    }
+
+    .budget-input-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .budget-input-wrapper span {
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .budget-input-wrapper input {
+      width: 120px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 6px;
+    }
+
     /* Formulário de Adicionar */
     .add-form {
       display: grid;
@@ -69,7 +141,7 @@
       gap: 10px;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 640px) {
       .add-form {
         grid-template-columns: 1fr 1fr;
       }
@@ -107,14 +179,14 @@
       background-color: var(--primary-hover);
     }
 
-    /* Painel de Filtros e Status */
-    .dashboard {
+    /* Controles e Progresso */
+    .dashboard-controls {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
 
     .filters button {
@@ -148,13 +220,13 @@
 
     /* Lista de Itens */
     .category-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin: 15px 0 10px 0;
-      color: var(--text-muted);
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 20px 0 10px 0;
+      color: var(--primary);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 2px solid var(--border);
       padding-bottom: 4px;
     }
 
@@ -166,12 +238,13 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 12px;
+      padding: 12px;
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 8px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       transition: all 0.2s;
+      gap: 10px;
     }
 
     .item:hover {
@@ -179,8 +252,8 @@
     }
 
     .item.completed {
-      background: #f1f5f9;
-      opacity: 0.7;
+      background: #f8fafc;
+      opacity: 0.85;
     }
 
     .item.completed .item-name {
@@ -192,25 +265,69 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      flex: 1;
     }
 
     .item-left input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       cursor: pointer;
       accent-color: var(--primary);
     }
 
-    .item-name {
-      font-weight: 500;
+    .item-info {
+      display: flex;
+      flex-direction: column;
     }
 
-    .item-qty {
-      font-size: 0.85rem;
-      background: #e2e8f0;
-      padding: 2px 8px;
-      border-radius: 12px;
+    .item-name {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .item-qty-target {
+      font-size: 0.82rem;
       color: var(--text-muted);
+    }
+
+    .item-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .input-field-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .input-field-group input {
+      padding: 6px 8px;
+      font-size: 0.9rem;
+      border-radius: 6px;
+    }
+
+    .input-qty {
+      width: 65px;
+      text-align: center;
+    }
+
+    .input-price {
+      width: 85px;
+      text-align: right;
+    }
+
+    .item-subtotal {
+      font-weight: 700;
+      font-size: 0.95rem;
+      min-width: 80px;
+      text-align: right;
+      color: var(--text);
     }
 
     .btn-delete {
@@ -232,41 +349,76 @@
       padding: 30px;
       color: var(--text-muted);
     }
+
+    @media (max-width: 680px) {
+      .item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .item-right {
+        width: 100%;
+        justify-content: space-between;
+        padding-top: 8px;
+        border-top: 1px dashed var(--border);
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
     <header>
-      <h1>🛒 Lista de Compras da Casa</h1>
-      <p>Gerenciador de compras de alimentos e limpeza (Dimensionado para 6 pessoas)</p>
+      <h1>🛒 Lista & Calculadora de Compras</h1>
+      <p>Planejamento de mercado e controle financeiro para 6 pessoas</p>
     </header>
 
-    <!-- Adicionar Item -->
+    <!-- Painel Financeiro -->
+    <div class="budget-panel">
+      <div class="stat-card main-stat">
+        <div class="label">Total Comprado (Já Gastei)</div>
+        <div class="value" id="totalSpent">R$ 0,00</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="label">Orçamento Disponível</div>
+        <div class="budget-input-wrapper">
+          <span>R$</span>
+          <input type="number" id="budgetAmount" step="10" min="0" placeholder="0.00" oninput="updateBudget()">
+        </div>
+      </div>
+
+      <div class="stat-card remaining" id="remainingCard">
+        <div class="label">Saldo Restante</div>
+        <div class="value" id="remainingBalance">R$ 0,00</div>
+      </div>
+    </div>
+
+    <!-- Adicionar Novo Item -->
     <div class="card">
       <form id="itemForm" class="add-form">
-        <input type="text" id="itemName" placeholder="Nome do item (ex: Arroz, Detergente)" required>
-        <input type="text" id="itemQty" placeholder="Qtd / Unidade (ex: 5 kg)" required>
+        <input type="text" id="itemName" placeholder="Nome do item (ex: Macarrão, Leite)" required>
+        <input type="text" id="itemQtyTarget" placeholder="Meta de Qtd (ex: 5 kg, 12 un)" required>
         <select id="itemCategory">
-          <option value="Limpeza">🧼 Limpeza</option>
           <option value="Alimentos">🌾 Alimentos</option>
           <option value="Hortifruti">🍎 Hortifruti</option>
+          <option value="Limpeza">🧼 Limpeza</option>
           <option value="Outros">📦 Outros</option>
         </select>
         <button type="submit" class="btn-add">Adicionar</button>
       </form>
     </div>
 
-    <!-- Progresso e Filtros -->
+    <!-- Progresso e Lista -->
     <div class="card">
-      <div class="dashboard">
+      <div class="dashboard-controls">
         <div class="filters">
           <button class="active" onclick="filterItems('all')">Todos</button>
           <button onclick="filterItems('pending')">Pendentes</button>
           <button onclick="filterItems('completed')">Comprados</button>
         </div>
-        <span id="statusCount" style="font-size: 0.9rem; color: var(--text-muted);">0 / 0 itens comprados</span>
+        <span id="statusCount" style="font-size: 0.88rem; color: var(--text-muted);">0 / 0 itens comprados</span>
       </div>
+      
       <div class="progress-bar">
         <div class="progress-fill" id="progressBar"></div>
       </div>
@@ -277,39 +429,68 @@
   </div>
 
   <script>
-    // Lista inicial pré-carregada para 6 pessoas
+    // Lista inicial ajustada (Foco amplo em ALIMENTOS para 6 pessoas, sem café, limpeza essencial)
     const defaultItems = [
-      // Materiais de Limpeza (Dimensionados para 6 pessoas)
-      { id: 1, name: "Detergente Líquido", qty: "6 frascos", category: "Limpeza", completed: false },
-      { id: 2, name: "Sabão em Pó / Líquido", qty: "5 kg", category: "Limpeza", completed: false },
-      { id: 3, name: "Amaciante de Roupas", qty: "3 litros", category: "Limpeza", completed: false },
-      { id: 4, name: "Desinfetante para Piso", qty: "3 litros", category: "Limpeza", completed: false },
-      { id: 5, name: "Água Sanitária / Cloro", qty: "4 litros", category: "Limpeza", completed: false },
-      { id: 6, name: "Papel Higiênico", qty: "Pacote c/ 24 ou 32 rolos", category: "Limpeza", completed: false },
-      { id: 7, name: "Esponjas de Aço / Multiúso", qty: "2 pacotes (8 un)", category: "Limpeza", completed: false },
-      { id: 8, name: "Limpador Multiúso (Veja)", qty: "2 frascos", category: "Limpeza", completed: false },
-      { id: 9, name: "Sacos de Lixo (50L e 30L)", qty: "2 rolos de cada", category: "Limpeza", completed: false },
-      { id: 10, name: "Sabão em Barra", qty: "1 pacote (5 un)", category: "Limpeza", completed: false },
-      
-      // Exemplo inicial de Alimentos
-      { id: 11, name: "Arroz Tipo 1", qty: "10 kg", category: "Alimentos", completed: false },
-      { id: 12, name: "Feijão Carioca", qty: "4 kg", category: "Alimentos", completed: false },
-      { id: 13, name: "Óleo de Soja", qty: "4 garrafas", category: "Alimentos", completed: false },
-      { id: 14, name: "Café em Pó", qty: "1 kg", category: "Alimentos", completed: false }
+      // ALIMENTOS (Mais itens e maior volume)
+      { id: 1, name: "Arroz Tipo 1", qtyTarget: "15 kg", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 2, name: "Feijão Carioca", qtyTarget: "6 kg", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 3, name: "Óleo de Soja", qtyTarget: "6 garrafas", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 4, name: "Açúcar Refinado / Cristal", qtyTarget: "5 kg", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 5, name: "Sal Refinado", qtyTarget: "2 kg", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 6, name: "Macarrão (Espaguete / Penne)", qtyTarget: "8 pacotes (500g)", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 7, name: "Molho de Tomate", qtyTarget: "10 saches", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 8, name: "Farinha de Trigo", qtyTarget: "4 kg", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 9, name: "Farinha de Milho / Fubá", qtyTarget: "3 kg", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 10, name: "Leite Integral", qtyTarget: "24 caixas (1L)", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 11, name: "Achocolatado em Pó", qtyTarget: "2 kg", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 12, name: "Manteiga / Margarina", qtyTarget: "3 potes (500g)", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 13, name: "Biscoito Doce / Salgado", qtyTarget: "10 pacotes", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 14, name: "Proteína: Carne Bovina", qtyTarget: "8 kg", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 15, name: "Proteína: Frango (Peito/Coxa)", qtyTarget: "10 kg", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 16, name: "Ovos", qtyTarget: "3 cartelas (90 ovos)", category: "Alimentos", boughtQty: 0, unitPrice: 0, completed: false },
+
+      // HORTIFRUTI
+      { id: 17, name: "Cebola", qtyTarget: "4 kg", category: "Hortifruti", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 18, name: "Alho", qtyTarget: "1 kg", category: "Hortifruti", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 19, name: "Batata", qtyTarget: "6 kg", category: "Hortifruti", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 20, name: "Tomate", qtyTarget: "5 kg", category: "Hortifruti", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 21, name: "Banana / Frutas da Estação", qtyTarget: "8 kg", category: "Hortifruti", boughtQty: 0, unitPrice: 0, completed: false },
+
+      // LIMPEZA (Essencial)
+      { id: 22, name: "Detergente Líquido", qtyTarget: "6 frascos", category: "Limpeza", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 23, name: "Sabão em Pó / Líquido", qtyTarget: "5 kg", category: "Limpeza", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 24, name: "Desinfetante", qtyTarget: "3 litros", category: "Limpeza", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 25, name: "Água Sanitária", qtyTarget: "4 litros", category: "Limpeza", boughtQty: 0, unitPrice: 0, completed: false },
+      { id: 26, name: "Papel Higiênico", qtyTarget: "1 pacote (24 rolos)", category: "Limpeza", boughtQty: 0, unitPrice: 0, completed: false }
     ];
 
-    // Carregar dados salvos no navegador ou usar a lista padrão
-    let items = JSON.parse(localStorage.getItem('house_shopping_list')) || defaultItems;
+    // Carregar do localStorage
+    let items = JSON.parse(localStorage.getItem('house_shopping_list_v2')) || defaultItems;
+    let userBudget = parseFloat(localStorage.getItem('house_shopping_budget')) || 0;
     let currentFilter = 'all';
 
     const form = document.getElementById('itemForm');
     const shoppingListContainer = document.getElementById('shoppingList');
     const progressBar = document.getElementById('progressBar');
     const statusCount = document.getElementById('statusCount');
+    const totalSpentEl = document.getElementById('totalSpent');
+    const budgetInput = document.getElementById('budgetAmount');
+    const remainingBalanceEl = document.getElementById('remainingBalance');
+    const remainingCard = document.getElementById('remainingCard');
 
-    // Salvar no LocalStorage
-    function saveItems() {
-      localStorage.setItem('house_shopping_list', JSON.stringify(items));
+    if (userBudget > 0) {
+      budgetInput.value = userBudget;
+    }
+
+    function saveState() {
+      localStorage.setItem('house_shopping_list_v2', JSON.stringify(items));
+      localStorage.setItem('house_shopping_budget', userBudget);
+    }
+
+    function updateBudget() {
+      userBudget = parseFloat(budgetInput.value) || 0;
+      saveState();
+      calculateTotals();
     }
 
     // Adicionar Novo Item
@@ -317,60 +498,121 @@
       e.preventDefault();
       
       const name = document.getElementById('itemName').value.trim();
-      const qty = document.getElementById('itemQty').value.trim();
+      const qtyTarget = document.getElementById('itemQtyTarget').value.trim();
       const category = document.getElementById('itemCategory').value;
 
-      if (name && qty) {
+      if (name && qtyTarget) {
         const newItem = {
           id: Date.now(),
           name,
-          qty,
+          qtyTarget,
           category,
+          boughtQty: 0,
+          unitPrice: 0,
           completed: false
         };
 
         items.push(newItem);
-        saveItems();
+        saveState();
         renderList();
         form.reset();
       }
     });
 
-    // Alternar status de concluído
     function toggleComplete(id) {
       items = items.map(item => {
-        if (item.id === id) item.completed = !item.completed;
+        if (item.id === id) {
+          item.completed = !item.completed;
+          if (item.completed && item.boughtQty === 0) {
+            item.boughtQty = 1;
+          }
+        }
         return item;
       });
-      saveItems();
+      saveState();
       renderList();
     }
 
-    // Remover Item
+    function updateItemValues(id, field, value) {
+      const numericVal = parseFloat(value) || 0;
+      items = items.map(item => {
+        if (item.id === id) {
+          item[field] = numericVal;
+          if (field === 'boughtQty' && numericVal > 0 && !item.completed) {
+            item.completed = true;
+          }
+        }
+        return item;
+      });
+      saveState();
+      calculateTotals();
+      
+      const subtotalEl = document.getElementById(`subtotal-${id}`);
+      const checkboxEl = document.getElementById(`check-${id}`);
+      const itemObj = items.find(i => i.id === id);
+      
+      if (subtotalEl && itemObj) {
+        const subtotal = itemObj.boughtQty * itemObj.unitPrice;
+        subtotalEl.innerText = formatCurrency(subtotal);
+      }
+      if (checkboxEl && itemObj) {
+        checkboxEl.checked = itemObj.completed;
+        const itemCard = document.getElementById(`item-card-${id}`);
+        if (itemCard) {
+          if (itemObj.completed) itemCard.classList.add('completed');
+          else itemCard.classList.remove('completed');
+        }
+      }
+    }
+
     function deleteItem(id) {
       items = items.filter(item => item.id !== id);
-      saveItems();
+      saveState();
       renderList();
     }
 
-    // Filtrar Exibição
     function filterItems(filter) {
       currentFilter = filter;
-      
-      // Atualizar botões ativos
-      document.querySelectorAll('.filters button').forEach(btn => {
-        btn.classList.remove('active');
-      });
+      document.querySelectorAll('.filters button').forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
-
       renderList();
     }
 
-    // Renderizar a Lista na Tela
+    function formatCurrency(val) {
+      return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function calculateTotals() {
+      let totalSpent = 0;
+
+      items.forEach(item => {
+        if (item.completed || item.boughtQty > 0) {
+          totalSpent += (item.boughtQty * item.unitPrice);
+        }
+      });
+
+      totalSpentEl.innerText = formatCurrency(totalSpent);
+
+      const remaining = userBudget - totalSpent;
+      remainingBalanceEl.innerText = formatCurrency(remaining);
+
+      if (remaining < 0) {
+        remainingCard.className = 'stat-card remaining negative';
+      } else {
+        remainingCard.className = 'stat-card remaining positive';
+      }
+
+      const totalCount = items.length;
+      const completedCount = items.filter(i => i.completed).length;
+      const percentage = totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100);
+
+      progressBar.style.width = `${percentage}%`;
+      statusCount.innerText = `${completedCount} de ${totalCount} itens comprados (${percentage}%)`;
+    }
+
     function renderList() {
       shoppingListContainer.innerHTML = '';
 
-      // Filtragem
       let filteredItems = items.filter(item => {
         if (currentFilter === 'pending') return !item.completed;
         if (currentFilter === 'completed') return item.completed;
@@ -379,39 +621,56 @@
 
       if (filteredItems.length === 0) {
         shoppingListContainer.innerHTML = `<div class="empty-state">Nenhum item encontrado nesta visualização.</div>`;
-        updateMetrics();
+        calculateTotals();
         return;
       }
 
-      // Agrupar por Categoria
-      const categories = ['Limpeza', 'Alimentos', 'Hortifruti', 'Outros'];
+      const categories = ['Alimentos', 'Hortifruti', 'Limpeza', 'Outros'];
 
       categories.forEach(cat => {
         const catItems = filteredItems.filter(item => item.category === cat);
 
         if (catItems.length > 0) {
-          // Título da Categoria
           const catTitle = document.createElement('div');
           catTitle.className = 'category-title';
           catTitle.innerText = cat;
           shoppingListContainer.appendChild(catTitle);
 
-          // Lista de Itens da Categoria
           const ul = document.createElement('ul');
           ul.className = 'item-list';
 
           catItems.forEach(item => {
+            const subtotal = item.boughtQty * item.unitPrice;
             const li = document.createElement('li');
+            li.id = `item-card-${item.id}`;
             li.className = `item ${item.completed ? 'completed' : ''}`;
+            
             li.innerHTML = `
               <div class="item-left">
-                <input type="checkbox" ${item.completed ? 'checked' : ''} onchange="toggleComplete(${item.id})">
-                <div>
+                <input type="checkbox" id="check-${item.id}" ${item.completed ? 'checked' : ''} onchange="toggleComplete(${item.id})">
+                <div class="item-info">
                   <span class="item-name">${item.name}</span>
-                  <span class="item-qty">${item.qty}</span>
+                  <span class="item-qty-target">Meta: ${item.qtyTarget}</span>
                 </div>
               </div>
-              <button class="btn-delete" onclick="deleteItem(${item.id})" title="Excluir">🗑️</button>
+
+              <div class="item-right">
+                <div class="input-field-group">
+                  <label>Qtd:</label>
+                  <input type="number" class="input-qty" min="0" step="1" value="${item.boughtQty || ''}" placeholder="0" oninput="updateItemValues(${item.id}, 'boughtQty', this.value)">
+                </div>
+
+                <div class="input-field-group">
+                  <label>R$ un:</label>
+                  <input type="number" class="input-price" min="0" step="0.01" value="${item.unitPrice || ''}" placeholder="0.00" oninput="updateItemValues(${item.id}, 'unitPrice', this.value)">
+                </div>
+
+                <div class="item-subtotal" id="subtotal-${item.id}">
+                  ${formatCurrency(subtotal)}
+                </div>
+
+                <button class="btn-delete" onclick="deleteItem(${item.id})" title="Excluir">🗑️</button>
+              </div>
             `;
             ul.appendChild(li);
           });
@@ -420,20 +679,9 @@
         }
       });
 
-      updateMetrics();
+      calculateTotals();
     }
 
-    // Atualizar Barra de Progresso e Métricas
-    function updateMetrics() {
-      const total = items.length;
-      const completed = items.filter(i => i.completed).length;
-      const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
-
-      progressBar.style.width = `${percentage}%`;
-      statusCount.innerText = `${completed} de ${total} itens comprados (${percentage}%)`;
-    }
-
-    // Inicialização
     renderList();
   </script>
 </body>
