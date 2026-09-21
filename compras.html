@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Compras da Casa</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #ef4444;
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 800px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    /* Formulário de Adicionar */
+    .add-form {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto;
+      gap: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .add-form {
+        grid-template-columns: 1fr 1fr;
+      }
+      .add-form input:nth-child(1) {
+        grid-column: span 2;
+      }
+      .add-form button {
+        grid-column: span 2;
+      }
+    }
+
+    input, select, button {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    button.btn-add {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button.btn-add:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /* Painel de Filtros e Status */
+    .dashboard {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .filters button {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      cursor: pointer;
+      margin-right: 4px;
+    }
+
+    .filters button.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--success);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Lista de Itens */
+    .category-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 15px 0 10px 0;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 4px;
+    }
+
+    .item-list {
+      list-style: none;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+
+    .item:hover {
+      border-color: #cbd5e1;
+    }
+
+    .item.completed {
+      background: #f1f5f9;
+      opacity: 0.7;
+    }
+
+    .item.completed .item-name {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .item-left input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    .item-name {
+      font-weight: 500;
+    }
+
+    .item-qty {
+      font-size: 0.85rem;
+      background: #e2e8f0;
+      padding: 2px 8px;
+      border-radius: 12px;
+      color: var(--text-muted);
+    }
+
+    .btn-delete {
+      background: transparent;
+      border: none;
+      color: var(--danger);
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .btn-delete:hover {
+      background: #fee2e2;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 30px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>🛒 Lista de Compras da Casa</h1>
+      <p>Gerenciador de compras de alimentos e limpeza (Dimensionado para 6 pessoas)</p>
+    </header>
+
+    <!-- Adicionar Item -->
+    <div class="card">
+      <form id="itemForm" class="add-form">
+        <input type="text" id="itemName" placeholder="Nome do item (ex: Arroz, Detergente)" required>
+        <input type="text" id="itemQty" placeholder="Qtd / Unidade (ex: 5 kg)" required>
+        <select id="itemCategory">
+          <option value="Limpeza">🧼 Limpeza</option>
+          <option value="Alimentos">🌾 Alimentos</option>
+          <option value="Hortifruti">🍎 Hortifruti</option>
+          <option value="Outros">📦 Outros</option>
+        </select>
+        <button type="submit" class="btn-add">Adicionar</button>
+      </form>
+    </div>
+
+    <!-- Progresso e Filtros -->
+    <div class="card">
+      <div class="dashboard">
+        <div class="filters">
+          <button class="active" onclick="filterItems('all')">Todos</button>
+          <button onclick="filterItems('pending')">Pendentes</button>
+          <button onclick="filterItems('completed')">Comprados</button>
+        </div>
+        <span id="statusCount" style="font-size: 0.9rem; color: var(--text-muted);">0 / 0 itens comprados</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressBar"></div>
+      </div>
+
+      <!-- Renderização da Lista -->
+      <div id="shoppingList"></div>
+    </div>
+  </div>
+
+  <script>
+    // Lista inicial pré-carregada para 6 pessoas
+    const defaultItems = [
+      // Materiais de Limpeza (Dimensionados para 6 pessoas)
+      { id: 1, name: "Detergente Líquido", qty: "6 frascos", category: "Limpeza", completed: false },
+      { id: 2, name: "Sabão em Pó / Líquido", qty: "5 kg", category: "Limpeza", completed: false },
+      { id: 3, name: "Amaciante de Roupas", qty: "3 litros", category: "Limpeza", completed: false },
+      { id: 4, name: "Desinfetante para Piso", qty: "3 litros", category: "Limpeza", completed: false },
+      { id: 5, name: "Água Sanitária / Cloro", qty: "4 litros", category: "Limpeza", completed: false },
+      { id: 6, name: "Papel Higiênico", qty: "Pacote c/ 24 ou 32 rolos", category: "Limpeza", completed: false },
+      { id: 7, name: "Esponjas de Aço / Multiúso", qty: "2 pacotes (8 un)", category: "Limpeza", completed: false },
+      { id: 8, name: "Limpador Multiúso (Veja)", qty: "2 frascos", category: "Limpeza", completed: false },
+      { id: 9, name: "Sacos de Lixo (50L e 30L)", qty: "2 rolos de cada", category: "Limpeza", completed: false },
+      { id: 10, name: "Sabão em Barra", qty: "1 pacote (5 un)", category: "Limpeza", completed: false },
+      
+      // Exemplo inicial de Alimentos
+      { id: 11, name: "Arroz Tipo 1", qty: "10 kg", category: "Alimentos", completed: false },
+      { id: 12, name: "Feijão Carioca", qty: "4 kg", category: "Alimentos", completed: false },
+      { id: 13, name: "Óleo de Soja", qty: "4 garrafas", category: "Alimentos", completed: false },
+      { id: 14, name: "Café em Pó", qty: "1 kg", category: "Alimentos", completed: false }
+    ];
+
+    // Carregar dados salvos no navegador ou usar a lista padrão
+    let items = JSON.parse(localStorage.getItem('house_shopping_list')) || defaultItems;
+    let currentFilter = 'all';
+
+    const form = document.getElementById('itemForm');
+    const shoppingListContainer = document.getElementById('shoppingList');
+    const progressBar = document.getElementById('progressBar');
+    const statusCount = document.getElementById('statusCount');
+
+    // Salvar no LocalStorage
+    function saveItems() {
+      localStorage.setItem('house_shopping_list', JSON.stringify(items));
+    }
+
+    // Adicionar Novo Item
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('itemName').value.trim();
+      const qty = document.getElementById('itemQty').value.trim();
+      const category = document.getElementById('itemCategory').value;
+
+      if (name && qty) {
+        const newItem = {
+          id: Date.now(),
+          name,
+          qty,
+          category,
+          completed: false
+        };
+
+        items.push(newItem);
+        saveItems();
+        renderList();
+        form.reset();
+      }
+    });
+
+    // Alternar status de concluído
+    function toggleComplete(id) {
+      items = items.map(item => {
+        if (item.id === id) item.completed = !item.completed;
+        return item;
+      });
+      saveItems();
+      renderList();
+    }
+
+    // Remover Item
+    function deleteItem(id) {
+      items = items.filter(item => item.id !== id);
+      saveItems();
+      renderList();
+    }
+
+    // Filtrar Exibição
+    function filterItems(filter) {
+      currentFilter = filter;
+      
+      // Atualizar botões ativos
+      document.querySelectorAll('.filters button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      renderList();
+    }
+
+    // Renderizar a Lista na Tela
+    function renderList() {
+      shoppingListContainer.innerHTML = '';
+
+      // Filtragem
+      let filteredItems = items.filter(item => {
+        if (currentFilter === 'pending') return !item.completed;
+        if (currentFilter === 'completed') return item.completed;
+        return true;
+      });
+
+      if (filteredItems.length === 0) {
+        shoppingListContainer.innerHTML = `<div class="empty-state">Nenhum item encontrado nesta visualização.</div>`;
+        updateMetrics();
+        return;
+      }
+
+      // Agrupar por Categoria
+      const categories = ['Limpeza', 'Alimentos', 'Hortifruti', 'Outros'];
+
+      categories.forEach(cat => {
+        const catItems = filteredItems.filter(item => item.category === cat);
+
+        if (catItems.length > 0) {
+          // Título da Categoria
+          const catTitle = document.createElement('div');
+          catTitle.className = 'category-title';
+          catTitle.innerText = cat;
+          shoppingListContainer.appendChild(catTitle);
+
+          // Lista de Itens da Categoria
+          const ul = document.createElement('ul');
+          ul.className = 'item-list';
+
+          catItems.forEach(item => {
+            const li = document.createElement('li');
+            li.className = `item ${item.completed ? 'completed' : ''}`;
+            li.innerHTML = `
+              <div class="item-left">
+                <input type="checkbox" ${item.completed ? 'checked' : ''} onchange="toggleComplete(${item.id})">
+                <div>
+                  <span class="item-name">${item.name}</span>
+                  <span class="item-qty">${item.qty}</span>
+                </div>
+              </div>
+              <button class="btn-delete" onclick="deleteItem(${item.id})" title="Excluir">🗑️</button>
+            `;
+            ul.appendChild(li);
+          });
+
+          shoppingListContainer.appendChild(ul);
+        }
+      });
+
+      updateMetrics();
+    }
+
+    // Atualizar Barra de Progresso e Métricas
+    function updateMetrics() {
+      const total = items.length;
+      const completed = items.filter(i => i.completed).length;
+      const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
+
+      progressBar.style.width = `${percentage}%`;
+      statusCount.innerText = `${completed} de ${total} itens comprados (${percentage}%)`;
+    }
+
+    // Inicialização
+    renderList();
+  </script>
+</body>
+</html>
